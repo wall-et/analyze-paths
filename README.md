@@ -1,6 +1,6 @@
 # PATHS RESEARCH
 
-* {Participant 1 Name}
+* Yael Yazdi
 * {Participant 2 Name}
 * {Participant 3 Name}
 
