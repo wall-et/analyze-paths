@@ -1,7 +1,7 @@
 # PATHS RESEARCH
 
-* {Participant 1 Name}
-* {Participant 2 Name}
-* {Participant 3 Name}
+* Yael Yazdi
+* Tzofia Tzayeg
+* Efrat Traube
 
 {OPTIONAL: MORE PROJECT INFO}
