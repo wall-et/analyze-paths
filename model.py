@@ -61,7 +61,14 @@ class Model:
         set index
         dump to pickle
         return df
+<<<<<<< HEAD
     def load_data(self,file):
         if os.path.exists(file):
             self.pickle=
 
+=======
+
+    def set_index(self,df):
+        df_by_obj = df.set_index(['filename', 'obj']).sort_index()
+        df_by_obj.head()
+>>>>>>> b965da9e609bf9d7770a94cf2b1d7757a81a5ec2
