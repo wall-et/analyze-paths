@@ -38,7 +38,8 @@ class View:
         plt.imshow(self.img)
         plt.show()
 
-    def plot_image_and_routes(self, dataframe, df_obj, image_name=None):
+    def plot_image_and_routes(self, data_obj, image_name=None):
+        dataframe, df_obj = data_obj
         if image_name:
             self.image_name = mpimg.imread(image_name)
         # im = mpimg.imread(self.image_name)

@@ -184,6 +184,9 @@ class Model:
             (min.between(start_time, end_time)) | ((min.where(min < start_time) & (max.where(max > start_time))))]
         return items
 
+    def get_data(self,filters):
+        return (self.data,self.data_by_objs.head(100))
+        pass
     # def get_route_by_block(self,x_inds,y_inds):
     #     logger.debug(f"entering get_route_by_block x_indexes={x_inds} y_indexes={y_inds}")
     #

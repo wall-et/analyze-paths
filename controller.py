@@ -16,7 +16,7 @@ class Controller:
         self.file = self.file if self.file else DEFUALT_DATA_FILE
         self.image = self.v.get_image()
         self.image = self.image if self.image else DEFUALT_IMAGE_FILE
-
+        self.filters = dict({'area':None,'hour':None,'date':None,'block':None})
         # self.set_block_sizes()
 
         self.command = {'area': [], 'hour': [], 'block': []}
@@ -31,7 +31,7 @@ class Controller:
     def initial_run(self):
         self.v.set_image(self.image)
         self.m.load_data(self.file)
-        self.v.plot_image_and_routes(self.m.data, self.m.get_all_routes().head(90))
+        self.v.plot_image_and_routes(self.m.get_data(self.filters))
 
     def run(self):
         self.initial_run()
