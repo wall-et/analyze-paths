@@ -118,7 +118,7 @@ class Model:
         return df
 
     def get_routes_by_area(self,x1,y1,x2,y2):
-        logger.debug(f"entering get_routes_by_area")
+        logger.debug(f"entering get_routes_by_area x1={x1},y1={y1},x2={x2},y2={y2}")
 
         df1 = self.data[(self.data.x.between(x1, x2)) & (self.data.y.between(y1, y2))]
 
@@ -129,11 +129,12 @@ class Model:
 
         return self.data_by_objs
 
-    def get_routes_be_hour(self):
+    def get_routes_be_hour(self,hour_one,hour_two):
+        logger.debug(f"entering get_routes_be_hour hour_one={hour_one},hour_two={hour_two}")
         objs = self.data.groupby(["filename", "obj"]).agg({'sample_time': ['min', 'max']})
 
-        begin_time = pd.to_datetime("14:31:09").time()
-        end_time = pd.to_datetime("15:31:09").time()
+        begin_time = pd.to_datetime(hour_two).time()
+        end_time = pd.to_datetime(hour_one).time()
 
         min = objs.sample_time['min'].dt.time  # objs[('sample_time','min')]
         max = objs.sample_time['max'].dt.time  # objs[('sample_time','max')]
