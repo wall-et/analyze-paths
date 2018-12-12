@@ -1,9 +1,8 @@
 
 import sys
-
 import model as m
-
-DEFUALT_IMAGE_FILE = "data/fixed.csv"
+import view as v
+from settings import DEFUALT_IMAGE_FILE,DEFUALT_DATA_FILE
 
 class Controller:
     def __init__(self):
@@ -12,5 +11,8 @@ class Controller:
     m.fix_corrupted_file(file)
 
 
+<<<<<<< HEAD
 def get_file():
     pass
+=======
+>>>>>>> 0f8f31b2f9671f5246b1976c4080413b908ee7fd
