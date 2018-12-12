@@ -1,8 +1,8 @@
-import controller as c
+from view import View
 def test_fix_corrupted_file():
-
-    new_img = "data/test.jfif"
-    c.fix_corrupted_file(new_img)
+    v = View()
+    new_img = "data/f.jpg"
+    v.display_image(new_img)
 
 
 test_fix_corrupted_file()
