@@ -1,9 +1,5 @@
-import time
-import logging
-import fileinput
 import sys
-
-from efrat_fix_csv import logger, FIXED_FILE_NAME, ERROR_FILE_NAME
+from settings import logger, FIXED_FILE_NAME, ERROR_FILE_NAME,DEFUALT_DATA_FILE
 
 
 def fix_corrupted_file(file_name):
@@ -18,7 +14,7 @@ def fix_corrupted_file(file_name):
             "w",
             encoding="utf-8") as errorw:
         for line in datar.readlines():
-            if (len(line.split(", ")) == 14):
+            if (len(line.split(', ')) == 14):
                 fixedw.write(line.strip(" "))
                 valid_counter += 1
             else:
@@ -28,4 +24,3 @@ def fix_corrupted_file(file_name):
     logger.error(f"{valid_counter} valid lines.")
     logger.error(f"{invalid_counter} corrupted lines.")
     logger.error("See corrupt_data.csv")
-
