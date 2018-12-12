@@ -73,6 +73,7 @@ class Model:
 
 
     def dump_to_pickle(self):
-       df = pd.groupby(self.pickle["frame", "x", "y", "obj", "size", "seq", "filename", "start", "path_time", "delta_time"])
-       
+       df = pd.groupby(self.pickle["x", "y", "obj","filename"])
+       return df
+
 
