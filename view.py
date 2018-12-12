@@ -1,9 +1,9 @@
-
 import sys
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
 from settings import logger
+
 
 class View:
     def __init__(self):
@@ -53,7 +53,7 @@ class View:
         elif l <= 20:
             self.plot_one_by_one(dataframe, df_obj)
         else:
-            self.plot_heatmap( dataframe, df_obj)
+            self.plot_heatmap(dataframe, df_obj)
         # plt.pause(0.1)
 
     def plot_all_routes(self, dataframe, df_obj):
@@ -70,14 +70,14 @@ class View:
         for t in df_obj.head(15).index:
             plt.imshow(im)
             oo = dataframe.loc[t]
-            plt.plot(oo.x, oo.y,c='r')
+            plt.plot(oo.x, oo.y, c='r')
             # plt.plot(oo.x, oo.y,c=np.random.rand(3,1))
             plt.pause(0.5)
             plt.gcf().clear()
         self.plot_all_routes(dataframe, df_obj)
 
     def plot_heatmap(self, dataframe, df_obj):
-        self.plot_all_routes(dataframe, df_obj)
+        self.plot_all_routes(dataframe, df_obj.head(100))
         pass
 
     def output(self, msg):
@@ -85,3 +85,26 @@ class View:
 
     def get_input(self):
         return input(">>")
+
+    def get_filters(self):
+        f = dict()
+        self.output(f"FIlter By Area :x1,y1,x2,y2:")
+        area = self.get_input()
+        if area:
+            x1, y1, x2, y2 = area.split(",")
+            area = [int(x1), int(y1), int(x2), int(y2)]
+        f['area'] = area
+        self.output(f"FIlter By Hour :00:00:00,00:00:00:")
+        hour = self.get_input()
+        if hour:
+            t1, t2 = hour.split(",")
+            hour = [t1, t2]
+        f['hour'] = hour
+        self.output(f"FIlter By Date and Time :00/00/00,00:00:00,00:00:00:")
+        date = self.get_input()
+        if date:
+            d, t1, t2 = date.split(",")
+            date = [d, t1, t2]
+        f['date'] = date
+        f['block'] = None
+        return f

@@ -146,7 +146,7 @@ class Model:
 
     def get_square_routes(self):
         img = plt.imread('data/paths0.png')
-        plt.imshow(img)
+        # plt.imshow(img)
         num_square = (2, 4)
         y = img.shape[0]
         x = img.shape[1]
@@ -185,8 +185,27 @@ class Model:
         return items
 
     def get_data(self,filters):
-        return (self.data,self.data_by_objs.head(100))
-        pass
+        intersect_series = self.data_by_objs
+        logger.debug(type(intersect_series))
+        if filters['hour']:
+            new_series = self.get_routes_be_hour(filters['hour'][0],filters['hour'][1])
+            intersect_series = pd.Series(list(set(intersect_series).intersection(set(new_series))))
+        if filters['area']:
+            new_series = self.get_routes_by_area(filters['area'][0],filters['area'][1],filters['area'][2],filters['area'][3])
+            logger.debug(f"found {len(new_series)} routes by area")
+            intersect_series = pd.Series(list(set(intersect_series).intersection(set(new_series))))
+            logger.debug(type(intersect_series))
+            logger.debug(type(new_series))
+            logger.debug(f"found {len(intersect_series)} routes by intersect_series")
+        if filters['date']:
+            new_series = self.get_routes_be_date(filters['date'][0],filters['date'][1],filters['date'][2])
+            intersect_series = pd.Series(list(set(intersect_series).intersection(set(new_series))))
+        if filters['block']:
+            # new_series = self.get_square_routes()
+            # intersect_series = pd.Series(list(set(intersect_series).intersection(set(new_series))))
+            pass
+        return (self.data,intersect_series)
+
     # def get_route_by_block(self,x_inds,y_inds):
     #     logger.debug(f"entering get_route_by_block x_indexes={x_inds} y_indexes={y_inds}")
     #

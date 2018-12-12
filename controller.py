@@ -35,34 +35,31 @@ class Controller:
 
     def run(self):
         self.initial_run()
-        self.v.output("Displaying the first 100 rounds.\nFeel free to filter.(or call for help)")
-        cmd = "init"
+        self.v.output("Displaying the first 100 rounds.\nType filter to filter.")
+        cmd = "filter"
         while cmd != 'exit':
+            if self.string_found("filter",cmd):
+                self.filters = self.v.get_filters()
+                self.v.plot_image_and_routes(self.m.get_data(self.filters))
             cmd = self.v.get_input()
-            if self.string_found("area", cmd) or self.string_found("f1", cmd):
-                x1, y1, x2, y2 = cmd.split(":")[1].split(",")
-                self.command['area'] = [x1, y1, x2, y2]
-                self.v.plot_image_and_routes(self.m.data, self.m.get_routes_by_area(int(x1), int(y1), int(x2), int(y2)))
-            if self.string_found("hour", cmd) or self.string_found("f2", cmd):
-                t1, t2 = cmd.split("::")[1].split(",")
-                self.command['area'] = [t1, t2]
-                self.v.plot_image_and_routes(self.m.data, self.m.get_routes_be_hour(t1, t2))
-
-            if self.string_found("date", cmd) or self.string_found("f3", cmd):
-                d,t1, t2 = cmd.split("|")[1].split(",")
-                self.v.plot_image_and_routes(self.m.data, self.m.get_routes_be_date(d,t1, t2))
-            # if self.string_found("block", cmd) or self.string_found("f5", cmd):
-            #     lls = cmd.split("|")
-            #     xinds = lls[1].split(",")
-            #     xinds = list(map(int, xinds))
-            #     yinds = lls[2].split(",")
-            #     yinds = list(map(int, yinds))
-            #     self.v.plot_image_and_routes(self.m.data, self.m.get_route_by_block(xinds, yinds))
-            if self.string_found("block", cmd) or self.string_found("f4", cmd):
-                list_block = [int(x) for x in cmd.split()[1:]]
-                img = plt.imread(self.image)
-                print(img.shape)
-                self.v.plot_image_and_routes(self.m.data, self.m.get_square_routes(list_block, img.shape))
+            # if self.string_found("area", cmd) or self.string_found("f1", cmd):
+            #     x1, y1, x2, y2 = cmd.split(":")[1].split(",")
+            #     self.command['area'] = [x1, y1, x2, y2]
+            #     self.v.plot_image_and_routes(self.m.data, self.m.get_routes_by_area(int(x1), int(y1), int(x2), int(y2)))
+            # if self.string_found("hour", cmd) or self.string_found("f2", cmd):
+            #     t1, t2 = cmd.split("::")[1].split(",")
+            #     self.command['area'] = [t1, t2]
+            #     self.v.plot_image_and_routes(self.m.data, self.m.get_routes_be_hour(t1, t2))
+            #
+            # if self.string_found("date", cmd) or self.string_found("f3", cmd):
+            #     d,t1, t2 = cmd.split("|")[1].split(",")
+            #     self.v.plot_image_and_routes(self.m.data, self.m.get_routes_be_date(d,t1, t2))
+            #
+            # if self.string_found("block", cmd) or self.string_found("f4", cmd):
+            #     list_block = [int(x) for x in cmd.split()[1:]]
+            #     img = plt.imread(self.image)
+            #     print(img.shape)
+            #     self.v.plot_image_and_routes(self.m.data, self.m.get_square_routes(list_block, img.shape))
 
 
     def string_found(self, string1, string2):
