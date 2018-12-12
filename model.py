@@ -121,13 +121,9 @@ class Model:
 
         return df
 
-<<<<<<< HEAD
-    def get_routes_by_area(self , x1 , x2 , y1 , y2):
-        logger.debug(f"entering get_routes_by_area")
-=======
+
     def get_routes_by_area(self,x1,y1,x2,y2):
         logger.debug(f"entering get_routes_by_area x1={x1},y1={y1},x2={x2},y2={y2}")
->>>>>>> 77f33476ef6ff03adf20cd4c12067992b003166b
 
         df1 = self.data[(self.data.x.between(x1, x2)) & (self.data.y.between(y1, y2))]
 
@@ -141,7 +137,7 @@ class Model:
 
         return self.data_by_objs
 
-<<<<<<< HEAD
+
     def get_square_routes(self):
         img = plt.imread('data/paths0.png')
         plt.imshow(img)
@@ -157,12 +153,11 @@ class Model:
 
 
 
-    def get_routes_be_hour(self):
-=======
+
     def get_routes_be_hour(self,hour_one,hour_two):
         logger.debug(f"entering get_routes_be_hour hour_one={hour_one},hour_two={hour_two}")
 
->>>>>>> 77f33476ef6ff03adf20cd4c12067992b003166b
+
         objs = self.data.groupby(["filename", "obj"]).agg({'sample_time': ['min', 'max']})
 
         begin_time = pd.to_datetime(hour_one).time()
