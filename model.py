@@ -18,6 +18,8 @@ class Model:
         self.pickle = None
         self.fixed_file = None
         self.data = None
+        self.im_x = None
+        self.im_y = None
 
     def fix_corrupted_file(self, file_name,fixed_path,corrupted_path):
         logger.debug(f"entering fix_corrupted_file,file_name={file_name},fixed_path={fixed_path},corrupted_path={corrupted_path}")
@@ -94,6 +96,11 @@ class Model:
     def set_indexes(self):
         self.data_by_objs = self.data.groupby(["filename", "obj"]).size().sort_values(ascending=False)
         self.data_by_time = self.data.groupby(["filename", "obj"]).agg({'sample_time': ['min', 'max']})
+        # df = self.data
+        # df['x_index'] = df['x'] // (self.im_x // 10)
+        # df['y_index'] = df['y'] // (self.im_y // 10)
+        # self.data_by_blocks = df
+
 
     def set_general_index(self, df):
         logger.debug(f"entering set_index")
@@ -178,3 +185,8 @@ class Model:
         items = self.data_by_time[
             (min.between(start_time, end_time)) | ((min.where(min < start_time) & (max.where(max > start_time))))]
         return items
+
+    # def get_route_by_block(self,x_inds,y_inds):
+    #     logger.debug(f"entering get_route_by_block x_indexes={x_inds} y_indexes={y_inds}")
+    #
+    #     return self.data_by_blocks[(self.data_by_blocks['x_index'].isin(x_inds)) & (self.data_by_blocks['y_index'].isin(y_inds))]

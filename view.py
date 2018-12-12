@@ -3,7 +3,7 @@ import sys
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
-
+from settings import logger
 
 class View:
     def __init__(self):
@@ -45,6 +45,7 @@ class View:
         # plt.axis("off")
 
         l = len(df_obj)
+        logger.debug(f"plotting {l} routes")
         # self.plot_one_by_one(dataframe, df_obj)
         if l < 5000 and l > 20:
             self.plot_all_routes(dataframe, df_obj)
@@ -52,7 +53,6 @@ class View:
             self.plot_one_by_one(dataframe, df_obj)
         else:
             self.plot_heatmap( dataframe, df_obj)
-
         # plt.pause(0.1)
 
     def plot_all_routes(self, dataframe, df_obj):
