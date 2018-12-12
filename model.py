@@ -60,12 +60,10 @@ class Model:
         self.dump_to_pickle()
         return df
 
-    def load_data(self,file):
+    def load_data(self, file):
         if not os.path.exists(file):
             self.optimize_csv_file()
         self.pickle = pd.read_pickle(FIXED_FILE_NAME_PICKLE)
-
-
 
 
     def set_index(self):
@@ -73,10 +71,9 @@ class Model:
         df_by_obj.head()
 
 
-
     def dump_to_pickle(self):
-       df = pd.groupby(self.pickle["x", "y", "obj","filename"])
-       return df
+       df = pd.groupby(self.pickle["x", "y", "obj", "filename"])
+       return df.head()
 
 
     def get_route_depend_area(self,x1,x2,y1,y2):
