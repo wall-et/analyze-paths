@@ -13,7 +13,7 @@ class Controller:
         self.image = self.v.get_image()
         self.image = self.image if self.image else DEFUALT_IMAGE_FILE
         # self.fix_data()
-        self.initial_run()
+        # self.initial_run()
 
 
     def fix_data(self):
@@ -23,9 +23,15 @@ class Controller:
     def initial_run(self):
         self.v.set_image(self.image)
         self.m.load_data(self.file)
-        self.v.plot_image_and_routes(self.m.data,self.m.get_all_routes())
+        self.v.plot_image_and_routes(self.m.data,self.m.get_all_routes().head(100))
 
     def run(self):
-        pass
+        self.initial_run()
+        self.v.output("Displaying the first 100 rounds.\nFeel free to filter.(or call for help)")
+        cmd = "init"
+        while cmd != 'exit':
+            cmd = self.v.get_input()
+
+
         # self.v.display_image(self.image)
 

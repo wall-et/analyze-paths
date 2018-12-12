@@ -85,8 +85,13 @@ class Model:
             self.dump_to_pickle(df, file_name_only)
 
         self.data = pd.read_pickle(f"pickles_can/{file_name_only}.pkz")
+        self.set_indexes()
 
-    def set_index(self, df):
+
+    def set_indexes(self):
+        self.data_by_objs = self.data.groupby(["filename", "obj"]).size().sort_values(ascending=False)
+
+    def set_general_index(self, df):
         logger.debug(f"entering set_index")
 
         df_by_obj = df.set_index(['filename', 'obj']).sort_index()
@@ -123,7 +128,5 @@ class Model:
     def get_all_routes(self):
         logger.debug(f"entering get_routes_by_obj")
 
-        objs = self.data.groupby(["filename","obj"]).size().sort_values(ascending=False).head(100)
-
-        return objs
+        return self.data_by_objs
 
