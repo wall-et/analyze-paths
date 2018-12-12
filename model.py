@@ -18,6 +18,7 @@ class Model:
         self.pickle = None
         self.fixed_file = None
         self.data = None
+        self.prev_data = None
 
     def fix_corrupted_file(self, file_name, fixed_path, corrupted_path):
         logger.debug(
@@ -135,12 +136,14 @@ class Model:
     def get_square_routes(self, list_square,size_img):
         # y = img.shape[0]
         # x = img.shape[1]
+        logger.debug(f"entering get_square_routes{size_img}")
         x_size = size_img[1] // self.SLICE_X
         y_size = size_img[0] // self.SLICE_Y
+        logger.debug(f"entering get_square_routes{x_size}")
         for num_square in list_square:
             p_x = (x_size * num_square[0], y_size * num_square[1])
             p_y = (x_size * (num_square[0] + 1), y_size * (num_square[1] + 1))
-            self.get_routes_by_area(p_x[0], p_y[0], p_x[1], p_y[1])
+        return self.get_routes_by_area(p_x[0], p_y[0], p_x[1], p_y[1])
 
     def get_routes_be_hour(self, hour_one, hour_two):
         logger.debug(f"entering get_routes_be_hour hour_one={hour_one},hour_two={hour_two}")
