@@ -117,10 +117,9 @@ class Model:
 
         return df
 
-    def get_routes_by_area(self,x1,x2,y1,y2):
+    def get_routes_by_area(self,x1,y1,x2,y2):
         logger.debug(f"entering get_routes_by_area")
 
-        logger.debug(f"entering set_time_row")
         df1 = self.data[(self.data.x.between(x1, x2)) & (self.data.y.between(y1, y2))]
 
         return df1.groupby(["filename", "obj"]).size()

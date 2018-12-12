@@ -1,6 +1,7 @@
 
 from view import View
 from model import Model
+import re
 from settings import DEFUALT_IMAGE_FILE, DEFUALT_DATA_FILE
 
 
@@ -31,7 +32,12 @@ class Controller:
         cmd = "init"
         while cmd != 'exit':
             cmd = self.v.get_input()
+            if self.string_found("area",cmd) or self.string_found("f1",cmd):
+                x1,y1,x2, y2 = cmd.split(":")[1].split(",")
+                self.v.plot_image_and_routes(self.m.data,self.m.get_routes_by_area(int(x1),int(y1),int(x2),int(y2)))
 
 
-        # self.v.display_image(self.image)
-
+    def string_found(self, string1, string2):
+        if re.search(r"\b" + re.escape(string1) + r"\b", string2):
+            return True
+        return False

@@ -7,6 +7,7 @@ from PIL import Image
 class View:
     def __init__(self):
         self.img = None
+        self.image_name = None
 
     def get_file(self):
         if sys.argv and len(sys.argv) > 1:
@@ -27,6 +28,7 @@ class View:
         return inp
 
     def set_image(self,image_name):
+        self.image_name = image_name
         self.img = mpimg.imread(image_name)
 
     def display_image(self):
@@ -37,15 +39,15 @@ class View:
 
     def plot_image_and_routes(self,dataframe, df_obj, image_name = None):
         if image_name:
-            self.img = mpimg.imread(image_name)
-        im = self.img
+            self.image_name = mpimg.imread(image_name)
+        im = mpimg.imread(self.image_name)
         # plt.axis("off")
         plt.imshow(im)
         for t in df_obj.index:
             oo = dataframe.loc[t]
             plt.plot(oo.x, oo.y)
-        # plt.show(block=False)
-        plt.pause(0.1)
+        plt.show()
+        # plt.pause(0.1)
 
     def output(self,msg):
         print(msg)
