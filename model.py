@@ -10,6 +10,9 @@ import os.path
 
 
 class Model:
+    SLICE_X = 10
+    SLICE_Y = 10
+
     def __init__(self):
         # self.df = self.load_data()
         self.pickle = None
@@ -102,7 +105,7 @@ class Model:
     def dump_to_pickle(self, df, pickle_name):
         logger.debug(f"entering dump_to_pickle")
 
-        self.pickle = f"pickles_can/{pickle_name}.pkz"
+        self.data = f"pickles_can/{pickle_name}.pkz"
         df.to_pickle(f"pickles_can/{pickle_name}.pkz")
 
 
@@ -118,21 +121,48 @@ class Model:
 
         return df
 
+<<<<<<< HEAD
+    def get_routes_by_area(self , x1 , x2 , y1 , y2):
+        logger.debug(f"entering get_routes_by_area")
+=======
     def get_routes_by_area(self,x1,y1,x2,y2):
         logger.debug(f"entering get_routes_by_area x1={x1},y1={y1},x2={x2},y2={y2}")
+>>>>>>> 77f33476ef6ff03adf20cd4c12067992b003166b
 
         df1 = self.data[(self.data.x.between(x1, x2)) & (self.data.y.between(y1, y2))]
 
         return df1.groupby(["filename", "obj"]).size()
+
+
+
 
     def get_all_routes(self):
         logger.debug(f"entering get_routes_by_obj")
 
         return self.data_by_objs
 
+<<<<<<< HEAD
+    def get_square_routes(self):
+        img = plt.imread('data/paths0.png')
+        plt.imshow(img)
+        num_square = (2, 4)
+        num_of_squares = (self.SLICE_X, 10)
+        y = img.shape[0]
+        x = img.shape[1]
+        x_size = x // self.SLICE_X
+        y_size = y // self.SLICE_Y
+        p1 = (x_size * num_square[0], y_size * (num_square[1]))
+        p2 = (x_size * (num_square[0] + 1), y_size * (num_square[1] + 1))
+        self.get_routes_by_area(p1[0], p2[0],p1[1], p2[1])
+
+
+
+    def get_routes_be_hour(self):
+=======
     def get_routes_be_hour(self,hour_one,hour_two):
         logger.debug(f"entering get_routes_be_hour hour_one={hour_one},hour_two={hour_two}")
 
+>>>>>>> 77f33476ef6ff03adf20cd4c12067992b003166b
         objs = self.data.groupby(["filename", "obj"]).agg({'sample_time': ['min', 'max']})
 
         begin_time = pd.to_datetime(hour_one).time()
