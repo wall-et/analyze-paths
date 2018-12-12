@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-import sys
-from settings import logger, FIXED_FILE_NAME, ERROR_FILE_NAME ,DEFUALT_DATA_FILE
-=======
 import pickle
 from settings import logger, FIXED_FILE_NAME, ERROR_FILE_NAME, FIXED_FILE_NAME_PICKLE
->>>>>>> 0f8f31b2f9671f5246b1976c4080413b908ee7fd
 
 
 class Model:
