@@ -1,7 +1,11 @@
 import sys
-from settings import logger, FIXED_FILE_NAME, ERROR_FILE_NAME,DEFUALT_DATA_FILE
+import pickle
+from settings import logger, FIXED_FILE_NAME, ERROR_FILE_NAME,FIXED_FILE_NAME_PICKLE
 
 class Model:
+    def __init__(self):
+        pass
+
     def fix_corrupted_file(self,file_name):
         logger.debug(f"entering fix_corrupted_file,file_name={file_name}")
         logger.error(file_name)
@@ -21,6 +25,25 @@ class Model:
                     errorw.write(line.strip(" "))
                     invalid_counter += 1
 
+<<<<<<< HEAD
         logger.error(f"{valid_counter} valid lines.")
         logger.error(f"{invalid_counter} corrupted lines.")
         logger.error("See corrupt_data.csv")
+=======
+    # for line in fileinput.input(file_name):
+    with open(file_name, 'r') as datar, open(FIXED_FILE_NAME, "wb") as fixedw, open(
+            ERROR_FILE_NAME,
+            "w",
+            encoding="utf-8") as errorw:
+        for line in datar.readlines():
+            if (len(line.split(', ')) == 14):
+                pickle.dump(line.strip(" "),fixedw)
+                valid_counter += 1
+            else:
+                errorw.write(line.strip(" "))
+                invalid_counter += 1
+
+    logger.error(f"{valid_counter} valid lines.")
+    logger.error(f"{invalid_counter} corrupted lines.")
+    logger.error("See corrupt_data.csv")
+>>>>>>> 0bc218003132c530924d55657611fec6b4718261
