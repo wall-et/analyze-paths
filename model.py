@@ -120,10 +120,14 @@ class Model:
 
         return df
 
+<<<<<<< HEAD
     def get_routes_by_area(self , x1 , x2 , y1 , y2):
         logger.debug(f"entering get_routes_by_area")
+=======
+    def get_routes_by_area(self,x1,y1,x2,y2):
+        logger.debug(f"entering get_routes_by_area x1={x1},y1={y1},x2={x2},y2={y2}")
+>>>>>>> 77f33476ef6ff03adf20cd4c12067992b003166b
 
-        logger.debug(f"entering set_time_row")
         df1 = self.data[(self.data.x.between(x1, x2)) & (self.data.y.between(y1, y2))]
 
         return df1.groupby(["filename", "obj"]).size()
@@ -136,6 +140,7 @@ class Model:
 
         return self.data_by_objs
 
+<<<<<<< HEAD
     def get_square_routes(self):
         img = plt.imread('data/paths0.png')
         plt.imshow(img)
@@ -152,13 +157,19 @@ class Model:
 
 
     def get_routes_be_hour(self):
+=======
+    def get_routes_be_hour(self,hour_one,hour_two):
+        logger.debug(f"entering get_routes_be_hour hour_one={hour_one},hour_two={hour_two}")
+
+>>>>>>> 77f33476ef6ff03adf20cd4c12067992b003166b
         objs = self.data.groupby(["filename", "obj"]).agg({'sample_time': ['min', 'max']})
 
-        begin_time = pd.to_datetime("14:31:09").time()
-        end_time = pd.to_datetime("15:31:09").time()
+        begin_time = pd.to_datetime(hour_two).time()
+        end_time = pd.to_datetime(hour_one).time()
 
         min = objs.sample_time['min'].dt.time  # objs[('sample_time','min')]
         max = objs.sample_time['max'].dt.time  # objs[('sample_time','max')]
 
         items = objs[(min.between(begin_time, end_time)) | ((min < begin_time) & (max > begin_time))]
-        return items
+        obj = items.drop('sample_time', 1)
+        return obj
