@@ -17,6 +17,7 @@ class Controller:
 
     def fix_data(self):
         self.m.fix_corrupted_file(self.file)
+        self.m.load_data(self.file)
 
     def run(self):
         self.v.display_image(self.image)
