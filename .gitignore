@@ -10,3 +10,5 @@ Pipfile.lock  # This file should actually BE in the repository
 oddetect.csv
 log.txt
 error_log.txt
+
+pickles_can/

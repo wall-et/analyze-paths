@@ -24,16 +24,22 @@ class View:
             inp = input("Insert Image Name To Display")
         return inp
 
-    def display_image(self,image_name):
-        image = mpimg.imread(image_name)
+    def set_image(self,image_name):
+        self.img = mpimg.imread(image_name)
+
+    def display_image(self):
+        # image = mpimg.imread(self.img)
         plt.axis("off")
-        plt.imshow(image)
+        plt.imshow(self.img)
         plt.show()
 
-    def plotfilter(dataframe, df_obj, img_name):
-        im = Image.open(img_name)
+    def plot_image_and_routes(self,dataframe, df_obj, image_name = None):
+        if image_name:
+            self.img = mpimg.imread(image_name)
+        im = self.img
+        # plt.axis("off")
         plt.imshow(im)
-        for t in dataframe.index:
-            oo = df_obj.loc[t]
-            plt.plot(oo.x, oo.y, alpha=0.7)
+        for t in df_obj.index:
+            oo = dataframe.loc[t]
+            plt.plot(oo.x, oo.y)
         plt.show()
