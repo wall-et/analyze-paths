@@ -175,6 +175,6 @@ class Model:
         min = self.data_by_time[('sample_time', 'min')]
         max = self.data_by_time[('sample_time', 'max')]
 
-        items = objs[
+        items = self.data_by_time[
             (min.between(start_time, end_time)) | ((min.where(min < start_time) & (max.where(max > start_time))))]
         return items
