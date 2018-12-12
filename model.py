@@ -151,12 +151,8 @@ class Model:
         p2 = (x_size * (num_square[0] + 1), y_size * (num_square[1] + 1))
         self.get_routes_by_area(p1[0], p2[0],p1[1], p2[1])
 
-
-
-
     def get_routes_be_hour(self,hour_one,hour_two):
         logger.debug(f"entering get_routes_be_hour hour_one={hour_one},hour_two={hour_two}")
-
 
         objs = self.data.groupby(["filename", "obj"]).agg({'sample_time': ['min', 'max']})
 
@@ -169,3 +165,19 @@ class Model:
         items = self.data_by_time[(min.between(begin_time, end_time)) | ((min < begin_time) & (max > begin_time))]
         obj = items.drop('sample_time', 1)
         return obj
+
+    def get_routes_be_date(self, date, hour_one, hour_two):
+        logger.debug(f"entering get_routes_be_date date={date} hour_one={hour_one},hour_two={hour_two}")
+
+        objs = self.data.groupby(["filename", "obj"]).agg({'sample_time': ['min', 'max']})
+        date = pd.to_datetime(date)#"2017-08-17"
+
+        start_time = date + pd.to_timedelta(hour_one)#"07:01:09"
+        end_time = date + pd.to_timedelta(hour_two)#"08:11:09"
+
+        min = objs[('sample_time', 'min')]
+        max = objs[('sample_time', 'max')]
+
+        items = objs[
+            (min.between(start_time, end_time)) | ((min.where(min < start_time) & (max.where(max > start_time))))]
+        return items
