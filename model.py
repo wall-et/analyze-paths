@@ -1,5 +1,6 @@
 import sys
-from settings import logger, FIXED_FILE_NAME, ERROR_FILE_NAME,DEFUALT_DATA_FILE
+import pickle
+from settings import logger, FIXED_FILE_NAME, ERROR_FILE_NAME,FIXED_FILE_NAME_PICKLE
 
 
 def fix_corrupted_file(file_name):
@@ -9,13 +10,13 @@ def fix_corrupted_file(file_name):
     invalid_counter = 0
 
     # for line in fileinput.input(file_name):
-    with open(file_name, 'r') as datar, open(FIXED_FILE_NAME, "w", encoding="utf-8") as fixedw, open(
+    with open(file_name, 'r') as datar, open(FIXED_FILE_NAME, "wb") as fixedw, open(
             ERROR_FILE_NAME,
             "w",
             encoding="utf-8") as errorw:
         for line in datar.readlines():
             if (len(line.split(', ')) == 14):
-                fixedw.write(line.strip(" "))
+                pickle.dump(line.strip(" "),fixedw)
                 valid_counter += 1
             else:
                 errorw.write(line.strip(" "))
