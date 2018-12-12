@@ -56,19 +56,20 @@ class Model:
         useful_cols = ["frame", "x", "y", "obj", "size", "seq", "filename", "start", "path_time", "delta_time"]
         df = pd.read_csv(FIXED_FILE_NAME, names=cols, usecols=useful_cols, dtype=cols_types, parse_dates=['start'],
                           infer_datetime_format=True)
+
         remove duplica
         groupby x,y,obj,file,seq
         set index
         dump to pickle
         return df
-<<<<<<< HEAD
-    def load_data(self,file):
-        if os.path.exists(file):
-            self.pickle=
 
-=======
+    def load_data(self,file):
+        if not os.path.exists(file):
+            self.optimize_csv_file()
+        self.pickle = pd.read_pickle(FIXED_FILE_NAME_PICKLE)
+
+
 
     def set_index(self,df):
         df_by_obj = df.set_index(['filename', 'obj']).sort_index()
         df_by_obj.head()
->>>>>>> b965da9e609bf9d7770a94cf2b1d7757a81a5ec2
