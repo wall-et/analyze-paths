@@ -26,7 +26,7 @@ class Controller:
     def initial_run(self):
         self.v.set_image(self.image)
         self.m.load_data(self.file)
-        # self.v.plot_image_and_routes(self.m.data, self.m.get_all_routes().head(100))
+        self.v.plot_image_and_routes(self.m.data, self.m.get_all_routes().head(90))
 
     def run(self):
         self.initial_run()

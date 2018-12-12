@@ -21,8 +21,7 @@ class Model:
         self.prev_data = None
 
     def fix_corrupted_file(self, file_name, fixed_path, corrupted_path):
-        logger.debug(
-            f"entering fix_corrupted_file,file_name={file_name},fixed_path={fixed_path},corrupted_path={corrupted_path}")
+        logger.debug(f"entering fix_corrupted_file,file_name={file_name},fixed_path={fixed_path},corrupted_path={corrupted_path}")
         logger.error(file_name)
 
         valid_counter = 0
@@ -95,6 +94,7 @@ class Model:
 
     def set_indexes(self):
         self.data_by_objs = self.data.groupby(["filename", "obj"]).size().sort_values(ascending=False)
+        self.data_by_time = self.data.groupby(["filename", "obj"]).agg({'sample_time': ['min', 'max']})
 
     def set_general_index(self, df):
         logger.debug(f"entering set_index")
@@ -121,7 +121,9 @@ class Model:
 
         return df
 
-    def get_routes_by_area(self, x1, y1, x2, y2):
+
+
+    def get_routes_by_area(self,x1,y1,x2,y2):
         logger.debug(f"entering get_routes_by_area x1={x1},y1={y1},x2={x2},y2={y2}")
 
         df1 = self.data[(self.data.x.between(x1, x2)) & (self.data.y.between(y1, y2))]
@@ -133,28 +135,42 @@ class Model:
 
         return self.data_by_objs
 
-    def get_square_routes(self, list_square,size_img):
-        # y = img.shape[0]
-        # x = img.shape[1]
-        logger.debug(f"entering get_square_routes{size_img}")
-        x_size = size_img[1] // self.SLICE_X
-        y_size = size_img[0] // self.SLICE_Y
-        logger.debug(f"entering get_square_routes{x_size}")
-        for num_square in list_square:
-            p_x = (x_size * num_square[0], y_size * num_square[1])
-            p_y = (x_size * (num_square[0] + 1), y_size * (num_square[1] + 1))
-        return self.get_routes_by_area(p_x[0], p_y[0], p_x[1], p_y[1])
+    def get_square_routes(self):
+        img = plt.imread('data/paths0.png')
+        plt.imshow(img)
+        num_square = (2, 4)
+        y = img.shape[0]
+        x = img.shape[1]
+        x_size = x // self.SLICE_X
+        y_size = y // self.SLICE_Y
+        p1 = (x_size * num_square[0], y_size * (num_square[1]))
+        p2 = (x_size * (num_square[0] + 1), y_size * (num_square[1] + 1))
+        self.get_routes_by_area(p1[0], p2[0], p1[1], p2[1])
 
     def get_routes_be_hour(self, hour_one, hour_two):
         logger.debug(f"entering get_routes_be_hour hour_one={hour_one},hour_two={hour_two}")
-        objs = self.data.groupby(["filename", "obj"]).agg({'sample_time': ['min', 'max']})
 
-        begin_time = pd.to_datetime(hour_two).time()
-        end_time = pd.to_datetime(hour_one).time()
+        start_time = pd.to_datetime(hour_one).time()
+        end_time = pd.to_datetime(hour_two).time()
 
-        min = objs.sample_time['min'].dt.time  # objs[('sample_time','min')]
-        max = objs.sample_time['max'].dt.time  # objs[('sample_time','max')]
+        min = self.data_by_time.sample_time['min'].dt.time  # objs[('sample_time','min')]
+        max = self.data_by_time.sample_time['max'].dt.time  # objs[('sample_time','max')]
 
-        items = objs[(min.between(begin_time, end_time)) | ((min < begin_time) & (max > begin_time))]
+        items = self.data_by_time[(min.between(start_time, end_time)) | ((min < start_time) & (max > start_time))]
         obj = items.drop('sample_time', 1)
         return obj
+
+    def get_routes_be_date(self, date, hour_one, hour_two):
+        logger.debug(f"entering get_routes_be_date date={date} hour_one={hour_one},hour_two={hour_two}")
+
+        date = pd.to_datetime(date) #"2017-08-17"
+
+        start_time = date + pd.to_timedelta(hour_one) #"07:01:09"
+        end_time = date + pd.to_timedelta(hour_two) #"08:11:09"
+
+        min = self.data_by_time[('sample_time', 'min')]
+        max = self.data_by_time[('sample_time', 'max')]
+
+        items = self.data_by_time[
+            (min.between(start_time, end_time)) | ((min.where(min < start_time) & (max.where(max > start_time))))]
+        return items

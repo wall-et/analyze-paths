@@ -26,7 +26,7 @@ class View:
             inp = self.get_input()
         return inp
 
-    def set_image(self,image_name):
+    def set_image(self, image_name):
         self.image_name = image_name
         self.img = mpimg.imread(image_name)
 
@@ -36,19 +36,36 @@ class View:
         plt.imshow(self.img)
         plt.show()
 
-    def plot_image_and_routes(self,dataframe, df_obj, image_name = None):
+    def plot_image_and_routes(self, dataframe, df_obj, image_name=None):
         if image_name:
             self.image_name = mpimg.imread(image_name)
         im = mpimg.imread(self.image_name)
         # plt.axis("off")
         plt.imshow(im)
-        for t in df_obj.index:
-            oo = dataframe.loc[t]
-            plt.plot(oo.x, oo.y)
+        l = len(df_obj)
+        if l < 5000 and l > 20:
+            self.plot_all_routes(dataframe, df_obj)
+        elif l <= 20:
+            self.plot_one_by_one(dataframe, df_obj)
+        else:
+            self.plot_heatmap( dataframe, df_obj)
         plt.show()
         # plt.pause(0.1)
 
-    def output(self,msg):
+    def plot_all_routes(self, dataframe, df_obj):
+        for t in df_obj.index:
+            oo = dataframe.loc[t]
+            plt.plot(oo.x, oo.y)
+
+    def plot_one_by_one(self, dataframe, df_obj):
+        self.plot_all_routes(dataframe, df_obj)
+        pass
+
+    def plot_heatmap(self, dataframe, df_obj):
+        self.plot_all_routes(dataframe, df_obj)
+        pass
+
+    def output(self, msg):
         print(msg)
 
     def get_input(self):
