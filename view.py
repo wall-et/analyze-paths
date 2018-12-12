@@ -12,6 +12,7 @@ class View:
         return (sys.argv[1] if sys.argv and len(sys.argv) > 1 else None)
 
     def get_image(self):
+        # print(sys.argv)
         return (sys.argv[2] if sys.argv and len(sys.argv) > 1 else None)
 
     def display_image(self,image_name):
