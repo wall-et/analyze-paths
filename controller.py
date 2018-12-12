@@ -22,7 +22,7 @@ class Controller:
     def initial_run(self):
         self.v.set_image(self.image)
         self.m.load_data(self.file)
-        # self.v.plot_image_and_routes(self.m.data, self.m.get_all_routes().head(100))
+        self.v.plot_image_and_routes(self.m.data, self.m.get_all_routes().head(90))
 
     def run(self):
         self.initial_run()
@@ -31,10 +31,10 @@ class Controller:
         while cmd != 'exit':
             cmd = self.v.get_input()
             if self.string_found("area", cmd) or self.string_found("f1", cmd):
-                x1, y1, x2, y2 = cmd.split(":")[1].split(",")
+                x1, y1, x2, y2 = cmd.split("|")[1].split(",")
                 self.v.plot_image_and_routes(self.m.data, self.m.get_routes_by_area(int(x1), int(y1), int(x2), int(y2)))
             if self.string_found("hour", cmd) or self.string_found("f2", cmd):
-                t1, t2 = cmd.split("::")[1].split(",")
+                t1, t2 = cmd.split("|")[1].split(",")
                 self.v.plot_image_and_routes(self.m.data, self.m.get_routes_be_hour(t1, t2))
 
     def string_found(self, string1, string2):

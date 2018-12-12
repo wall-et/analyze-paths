@@ -90,6 +90,7 @@ class Model:
 
     def set_indexes(self):
         self.data_by_objs = self.data.groupby(["filename", "obj"]).size().sort_values(ascending=False)
+        self.data_by_time = self.data.groupby(["filename", "obj"]).agg({'sample_time': ['min', 'max']})
 
     def set_general_index(self, df):
         logger.debug(f"entering set_index")
@@ -134,12 +135,12 @@ class Model:
 
         objs = self.data.groupby(["filename", "obj"]).agg({'sample_time': ['min', 'max']})
 
-        begin_time = pd.to_datetime(hour_two).time()
-        end_time = pd.to_datetime(hour_one).time()
+        begin_time = pd.to_datetime(hour_one).time()
+        end_time = pd.to_datetime(hour_two).time()
 
-        min = objs.sample_time['min'].dt.time  # objs[('sample_time','min')]
-        max = objs.sample_time['max'].dt.time  # objs[('sample_time','max')]
+        min = self.data_by_time.sample_time['min'].dt.time  # objs[('sample_time','min')]
+        max = self.data_by_time.sample_time['max'].dt.time  # objs[('sample_time','max')]
 
-        items = objs[(min.between(begin_time, end_time)) | ((min < begin_time) & (max > begin_time))]
+        items = self.data_by_time[(min.between(begin_time, end_time)) | ((min < begin_time) & (max > begin_time))]
         obj = items.drop('sample_time', 1)
         return obj
