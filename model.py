@@ -79,3 +79,7 @@ class Model:
        return df
 
 
+    def get_route_depend_area(self,x1,x2,y1,y2):
+        df1 = self.pickle[(self.pickle.x.between(x1, x2)) & (self.pickle.y.between(y1, y2))]
+        return df1.groupby(["filename", "obj"]).size()
+
