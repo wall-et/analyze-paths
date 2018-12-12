@@ -12,8 +12,8 @@ import os.path
 class Model:
     def __init__(self):
         # self.df = self.load_data()
-        self.pickle=None
-        pass
+        self.pickle = None
+
 
     def fix_corrupted_file(self, file_name):
         logger.debug(f"entering fix_corrupted_file,file_name={file_name}")
@@ -55,10 +55,8 @@ class Model:
         useful_cols = ["frame", "x", "y", "obj", "size", "seq", "filename", "start", "path_time", "delta_time"]
         df = pd.read_csv(FIXED_FILE_NAME, names=cols, usecols=useful_cols, dtype=cols_types, parse_dates=['start'],
                           infer_datetime_format=True)
-
-        remove duplica
-        groupby x,y,obj,file,seq
         self.set_index()
+        df.to_pickle(FIXED_FILE_NAME_PICKLE)
         self.dump_to_pickle()
         return df
 
@@ -73,12 +71,10 @@ class Model:
     def set_index(self):
         df_by_obj = self.pickle.set_index(['filename', 'obj']).sort_index()
         df_by_obj.head()
-<<<<<<< HEAD
-=======
+
 
 
     def dump_to_pickle(self):
        df = pd.groupby(self.pickle["frame", "x", "y", "obj", "size", "seq", "filename", "start", "path_time", "delta_time"])
        
 
->>>>>>> 200cf827389a7e1b5d4307d6b323ad8a495b5538
