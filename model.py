@@ -56,10 +56,13 @@ class Model:
                       infer_datetime_format=True)
         remove duplica
         groupby x,y,obj,file,seq
-        set index
-        dump to pickle
+        self.set_index(df)
+        self.dump_to_pickle()
         return df
 
     def set_index(self,df):
         df_by_obj = df.set_index(['filename', 'obj']).sort_index()
         df_by_obj.head()
+
+    def dump_to_pickle(self,df):
+        pd.groupby(["frame", "x", "y", "obj", "size", "seq", "filename", "start", "path_time", "delta_time"])
