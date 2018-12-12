@@ -1,5 +1,4 @@
 
-
 import pickle
 from settings import logger, FIXED_FILE_NAME, ERROR_FILE_NAME, FIXED_FILE_NAME_PICKLE
 

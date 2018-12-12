@@ -1,5 +1,4 @@
-import sys
-import model as m
+
 from view import View
 from model import Model
 from settings import DEFUALT_IMAGE_FILE, DEFUALT_DATA_FILE
@@ -8,16 +7,12 @@ from settings import DEFUALT_IMAGE_FILE, DEFUALT_DATA_FILE
 class Controller:
     def __init__(self):
         self.m = Model()
-        self.v = View(self.get_image())
-        self.file = self.get_file()
+        self.v = View()
+        self.file = self.v.get_file() if self.v.get_file() else DEFUALT_DATA_FILE
+        self.image = self.v.get_image() if self.v.get_image() else DEFUALT_IMAGE_FILE
         self.fix_data()
+        self.v.display_image(self.image)
 
-
-    def get_file(self):
-        return (sys.argv[1] if sys.argv and len(sys.argv) > 1 else DEFUALT_DATA_FILE)
-
-    def get_image(self):
-        return (sys.argv[2] if sys.argv and len(sys.argv) > 1 else DEFUALT_DATA_FILE)
 
     def fix_data(self):
         self.m.fix_corrupted_file(self.file)
