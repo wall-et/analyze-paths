@@ -13,9 +13,11 @@ class Controller:
         self.image = self.v.get_image()
         self.image = self.image if self.image else DEFUALT_IMAGE_FILE
         self.fix_data()
-        self.v.display_image(self.image)
 
 
     def fix_data(self):
         self.m.fix_corrupted_file(self.file)
+
+    def run(self):
+        self.v.display_image(self.image)
 
