@@ -2,10 +2,13 @@ import time
 import logging
 import fileinput
 import sys
-
+import pandas as pd
+import pickle
 
 logger = logging.getLogger(__name__)
 FIXED_FILE_NAME = "data/fixed.csv"
+FIXED_FILE_NAME_PICKLE = "data/paths.pkl.xz"
+
 ERROR_FILE_NAME = "data/corrupt_data.csv"
 DEFUALT_DATA_FILE = "data/oddetect.csv"
 # logging.basicConfig(
@@ -23,13 +26,14 @@ def fix_corrupted_file(file_name):
     invalid_counter = 0
 
     # for line in fileinput.input(file_name):
-    with open(file_name, 'r') as datar, open(FIXED_FILE_NAME, "w", encoding="utf-8") as fixedw, open(
+    with open(file_name, 'r') as datar, open(FIXED_FILE_NAME_PICKLE, "wb") as fixedw, open(
             ERROR_FILE_NAME,
             "w",
             encoding="utf-8") as errorw:
         for line in datar.readlines():
             if (len(line.split(", ")) == 14):
-                fixedw.write(line.strip(" "))
+                pickle.dump(line.strip(" "),fixedw)
+                # fixedw.write(line.strip(" "))
                 valid_counter += 1
             else:
                 errorw.write(line.strip(" "))
