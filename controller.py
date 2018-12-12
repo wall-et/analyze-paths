@@ -8,14 +8,16 @@ class Controller:
     def __init__(self):
         self.m = Model()
         self.v = View()
-        self.file = self.v.get_file() if self.v.get_file() else DEFUALT_DATA_FILE
-        self.image = self.v.get_image() if self.v.get_image() else DEFUALT_IMAGE_FILE
+        self.file = self.v.get_file()
+        self.file = self.file if self.file else DEFUALT_DATA_FILE
+        self.image = self.v.get_image()
+        self.image = self.image if self.image else DEFUALT_IMAGE_FILE
         self.fix_data()
-        self.v.display_image(self.image)
 
 
     def fix_data(self):
         self.m.fix_corrupted_file(self.file)
 
+    def run(self):
+        self.v.display_image(self.image)
 
-c = Controller()
