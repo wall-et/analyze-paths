@@ -39,7 +39,6 @@ class Model:
         logger.error("See corrupt_data.csv")
 
     def optimize_csv_file(self):
-
         cols_types = dict({
             'delta_time': 'object',
             'filename': 'category',
@@ -58,23 +57,22 @@ class Model:
                           infer_datetime_format=True)
         remove duplica
         groupby x,y,obj,file,seq
-        self.set_index(df)
+        self.set_index()
         self.dump_to_pickle()
         return df
-<<<<<<< HEAD
+
     def load_data(self,file):
         if os.path.exists(file):
             self.pickle=
 
-=======
 
-    def set_index(self,df):
-        df_by_obj = df.set_index(['filename', 'obj']).sort_index()
+
+    def set_index(self):
+        df_by_obj = self.pickle.set_index(['filename', 'obj']).sort_index()
         df_by_obj.head()
-<<<<<<< HEAD
 
-    def dump_to_pickle(self,df):
-        pd.groupby(["frame", "x", "y", "obj", "size", "seq", "filename", "start", "path_time", "delta_time"])
-=======
->>>>>>> b965da9e609bf9d7770a94cf2b1d7757a81a5ec2
->>>>>>> a8ea0ff3a0dd95a3d65dcb21056eccb26dabbd80
+
+    def dump_to_pickle(self):
+       df = pd.groupby(self.pickle["frame", "x", "y", "obj", "size", "seq", "filename", "start", "path_time", "delta_time"])
+       
+
