@@ -11,7 +11,8 @@ class View:
         if sys.argv and len(sys.argv) > 1:
             return sys.argv[1]
         else:
-            inp = input("Insert File Name To Parse")
+            self.output("Insert File Name To Parse")
+            inp = self.get_input()
         return inp
         # if inp else None
         # return (sys.argv[1] if sys.argv and len(sys.argv) > 1 else None)
@@ -20,7 +21,8 @@ class View:
         if sys.argv and len(sys.argv) > 2:
             return sys.argv[2]
         else:
-            inp = input("Insert Image Name To Display")
+            self.output("Insert Image Name To Display")
+            inp = self.get_input()
         return inp
 
     def set_image(self,image_name):
@@ -41,4 +43,11 @@ class View:
         for t in df_obj.index:
             oo = dataframe.loc[t]
             plt.plot(oo.x, oo.y)
-        plt.show()
+        # plt.show(block=False)
+        plt.pause(0.1)
+
+    def output(self,msg):
+        print(msg)
+
+    def get_input(self):
+        return input(">>")
