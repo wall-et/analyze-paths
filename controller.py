@@ -12,12 +12,20 @@ class Controller:
         self.file = self.file if self.file else DEFUALT_DATA_FILE
         self.image = self.v.get_image()
         self.image = self.image if self.image else DEFUALT_IMAGE_FILE
-        self.fix_data()
+        # self.fix_data()
+        self.initial_run()
 
 
     def fix_data(self):
         self.m.fix_corrupted_file(self.file)
+        self.m.load_data(self.file)
+
+    def initial_run(self):
+        self.v.set_image(self.image)
+        self.m.load_data(self.file)
+        self.v.plot_image_and_routes(self.m.data,self.m.get_all_routes())
 
     def run(self):
-        self.v.display_image(self.image)
+        pass
+        # self.v.display_image(self.image)
 

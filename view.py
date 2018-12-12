@@ -2,9 +2,10 @@ import sys
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
+
 class View:
     def __init__(self):
-        pass
+        self.img = None
 
     def get_file(self):
         if sys.argv and len(sys.argv) > 1:
@@ -22,8 +23,22 @@ class View:
             inp = input("Insert Image Name To Display")
         return inp
 
-    def display_image(self,image_name):
-        image = mpimg.imread(image_name)
+    def set_image(self,image_name):
+        self.img = mpimg.imread(image_name)
+
+    def display_image(self):
+        # image = mpimg.imread(self.img)
         plt.axis("off")
-        plt.imshow(image)
+        plt.imshow(self.img)
+        plt.show()
+
+    def plot_image_and_routes(self,dataframe, df_obj, image_name = None):
+        if image_name:
+            self.img = mpimg.imread(image_name)
+        im = self.img
+        # plt.axis("off")
+        plt.imshow(im)
+        for t in df_obj.index:
+            oo = dataframe.loc[t]
+            plt.plot(oo.x, oo.y)
         plt.show()
