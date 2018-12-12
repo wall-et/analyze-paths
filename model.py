@@ -39,7 +39,7 @@ class Model:
 
         logger.error(f"{valid_counter} valid lines.")
         print(f"{valid_counter} valid lines.")
-        logger.error(f"{invalid_counter} corrupted lines. See {curr_f}")
+        logger.error(f"{invalid_counter} corrupted lines. See {corrupted_path}")
 
     def optimize_csv_file(self, file_name):
         logger.debug(f"entering optimize_csv_file,file_name={file_name}")
