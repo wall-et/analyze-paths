@@ -80,3 +80,9 @@ class Model:
         df1 = self.pickle[(self.pickle.x.between(x1, x2)) & (self.pickle.y.between(y1, y2))]
         return df1.groupby(["filename", "obj"]).size()
 
+    def get_df_obj(self):
+        objs = self.pickle.groupby([
+            "filename",
+            "obj"]
+        ).size().sort_values(ascending=False)
+        return objs
