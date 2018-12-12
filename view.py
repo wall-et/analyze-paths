@@ -1,7 +1,6 @@
 import sys
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-from PIL import Image
 
 
 class View:
