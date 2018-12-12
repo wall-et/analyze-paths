@@ -130,7 +130,7 @@ class Model:
 
         return self.data_by_objs
 
-    def get_routes_be_hour(self):
+    def get_routes_by_hour(self):
         objs = self.data.groupby(["filename", "obj"]).agg({'sample_time': ['min', 'max']})
 
         begin_time = pd.to_datetime("14:31:09").time()
@@ -140,4 +140,5 @@ class Model:
         max = objs.sample_time['max'].dt.time  # objs[('sample_time','max')]
 
         items = objs[(min.between(begin_time, end_time)) | ((min < begin_time) & (max > begin_time))]
-        return items
+        obj = items.drop('sample_time', 1)
+        return obj
