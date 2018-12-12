@@ -7,10 +7,12 @@ from settings import logger, FIXED_FILE_NAME, ERROR_FILE_NAME, FIXED_FILE_NAME_P
 
 import matplotlib.pyplot as plt
 import pandas as pd
+import os.path
 
 class Model:
     def __init__(self):
         # self.df = self.load_data()
+        self.pickle=None
         pass
 
     def fix_corrupted_file(self, file_name):
@@ -53,9 +55,13 @@ class Model:
                 "delta_time", "tbd4"]
         useful_cols = ["frame", "x", "y", "obj", "size", "seq", "filename", "start", "path_time", "delta_time"]
         df = pd.read_csv(FIXED_FILE_NAME, names=cols, usecols=useful_cols, dtype=cols_types, parse_dates=['start'],
-                      infer_datetime_format=True)
+                          infer_datetime_format=True)
         remove duplica
         groupby x,y,obj,file,seq
         set index
         dump to pickle
         return df
+    def load_data(self,file):
+        if os.path.exists(file):
+            self.pickle=
+
