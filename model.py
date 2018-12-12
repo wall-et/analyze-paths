@@ -19,8 +19,9 @@ class Model:
         self.fixed_file = None
         self.data = None
 
-    def fix_corrupted_file(self, file_name,fixed_path,corrupted_path):
-        logger.debug(f"entering fix_corrupted_file,file_name={file_name},fixed_path={fixed_path},corrupted_path={corrupted_path}")
+    def fix_corrupted_file(self, file_name, fixed_path, corrupted_path):
+        logger.debug(
+            f"entering fix_corrupted_file,file_name={file_name},fixed_path={fixed_path},corrupted_path={corrupted_path}")
         logger.error(file_name)
 
         valid_counter = 0
@@ -61,7 +62,8 @@ class Model:
                 "delta_time", "tbd4"]
         useful_cols = ["frame", "x", "y", "obj", "size", "seq", "filename", "start", "path_time", "delta_time"]
 
-        df = pd.read_csv(file_name, names=cols, usecols=useful_cols, dtype=cols_types, parse_dates=['start'],infer_datetime_format=True)
+        df = pd.read_csv(file_name, names=cols, usecols=useful_cols, dtype=cols_types, parse_dates=['start'],
+                         infer_datetime_format=True)
 
         logger.debug(f"optimize_csv_file: finished reading csv file")
 
@@ -81,7 +83,7 @@ class Model:
 
         if not os.path.exists(self.fixed_file):
             curr_f = f"data/corrupted_{file_name_only}.csv"
-            self.fix_corrupted_file(file_name,self.fixed_file,curr_f)
+            self.fix_corrupted_file(file_name, self.fixed_file, curr_f)
 
         if not os.path.exists(f"pickles_can/{file_name_only}.pkz"):
             df = self.optimize_csv_file(self.fixed_file)
@@ -89,7 +91,6 @@ class Model:
 
         self.data = pd.read_pickle(f"pickles_can/{file_name_only}.pkz")
         self.set_indexes()
-
 
     def set_indexes(self):
         self.data_by_objs = self.data.groupby(["filename", "obj"]).size().sort_values(ascending=False)
@@ -107,7 +108,6 @@ class Model:
         self.data = f"pickles_can/{pickle_name}.pkz"
         df.to_pickle(f"pickles_can/{pickle_name}.pkz")
 
-
     def set_time_row(self, df):
         logger.debug(f"entering set_time_row")
 
@@ -120,48 +120,30 @@ class Model:
 
         return df
 
-<<<<<<< HEAD
-    def get_routes_by_area(self , x1 , x2 , y1 , y2):
-        logger.debug(f"entering get_routes_by_area")
-=======
-    def get_routes_by_area(self,x1,y1,x2,y2):
+    def get_routes_by_area(self, x1, y1, x2, y2):
         logger.debug(f"entering get_routes_by_area x1={x1},y1={y1},x2={x2},y2={y2}")
->>>>>>> 77f33476ef6ff03adf20cd4c12067992b003166b
 
         df1 = self.data[(self.data.x.between(x1, x2)) & (self.data.y.between(y1, y2))]
 
         return df1.groupby(["filename", "obj"]).size()
-
-
-
 
     def get_all_routes(self):
         logger.debug(f"entering get_routes_by_obj")
 
         return self.data_by_objs
 
-<<<<<<< HEAD
-    def get_square_routes(self):
-        img = plt.imread('data/paths0.png')
-        plt.imshow(img)
-        num_square = (2, 4)
-        num_of_squares = (self.SLICE_X, 10)
-        y = img.shape[0]
-        x = img.shape[1]
-        x_size = x // self.SLICE_X
-        y_size = y // self.SLICE_Y
-        p1 = (x_size * num_square[0], y_size * (num_square[1]))
-        p2 = (x_size * (num_square[0] + 1), y_size * (num_square[1] + 1))
-        self.get_routes_by_area(p1[0], p2[0],p1[1], p2[1])
+    def get_square_routes(self, list_square,size_img):
+        # y = img.shape[0]
+        # x = img.shape[1]
+        x_size = size_img[1] // self.SLICE_X
+        y_size = size_img[0] // self.SLICE_Y
+        for num_square in list_square:
+            p_x = (x_size * num_square[0], y_size * num_square[1])
+            p_y = (x_size * (num_square[0] + 1), y_size * (num_square[1] + 1))
+            self.get_routes_by_area(p_x[0], p_y[0], p_x[1], p_y[1])
 
-
-
-    def get_routes_be_hour(self):
-=======
-    def get_routes_be_hour(self,hour_one,hour_two):
+    def get_routes_be_hour(self, hour_one, hour_two):
         logger.debug(f"entering get_routes_be_hour hour_one={hour_one},hour_two={hour_two}")
-
->>>>>>> 77f33476ef6ff03adf20cd4c12067992b003166b
         objs = self.data.groupby(["filename", "obj"]).agg({'sample_time': ['min', 'max']})
 
         begin_time = pd.to_datetime(hour_two).time()
