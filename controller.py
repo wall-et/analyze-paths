@@ -1,6 +1,7 @@
 from view import View
 from model import Model
 import re
+
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -15,7 +16,11 @@ class Controller:
         self.file = self.file if self.file else DEFUALT_DATA_FILE
         self.image = self.v.get_image()
         self.image = self.image if self.image else DEFUALT_IMAGE_FILE
+
+        # self.set_block_sizes()
+
         self.command = {'area': [], 'hour': [], 'block': []}
+
         # self.fix_data()
         # self.initial_run()
 
@@ -42,13 +47,27 @@ class Controller:
                 t1, t2 = cmd.split("::")[1].split(",")
                 self.command['area'] = [t1, t2]
                 self.v.plot_image_and_routes(self.m.data, self.m.get_routes_be_hour(t1, t2))
-            if self.string_found("block", cmd) or self.string_found("f3", cmd):
+
+            if self.string_found("date", cmd) or self.string_found("f3", cmd):
+                d,t1, t2 = cmd.split("|")[1].split(",")
+                self.v.plot_image_and_routes(self.m.data, self.m.get_routes_be_date(d,t1, t2))
+            # if self.string_found("block", cmd) or self.string_found("f5", cmd):
+            #     lls = cmd.split("|")
+            #     xinds = lls[1].split(",")
+            #     xinds = list(map(int, xinds))
+            #     yinds = lls[2].split(",")
+            #     yinds = list(map(int, yinds))
+            #     self.v.plot_image_and_routes(self.m.data, self.m.get_route_by_block(xinds, yinds))
+            if self.string_found("block", cmd) or self.string_found("f4", cmd):
                 list_block = [int(x) for x in cmd.split()[1:]]
                 img = plt.imread(self.image)
                 print(img.shape)
                 self.v.plot_image_and_routes(self.m.data, self.m.get_square_routes(list_block, img.shape))
 
+
     def string_found(self, string1, string2):
         if re.search(r"\b" + re.escape(string1) + r"\b", string2):
             return True
         return False
+
+

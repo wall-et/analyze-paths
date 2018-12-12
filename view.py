@@ -1,7 +1,9 @@
+
 import sys
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-
+import numpy as np
+from settings import logger
 
 class View:
     def __init__(self):
@@ -39,27 +41,39 @@ class View:
     def plot_image_and_routes(self, dataframe, df_obj, image_name=None):
         if image_name:
             self.image_name = mpimg.imread(image_name)
-        im = mpimg.imread(self.image_name)
+        # im = mpimg.imread(self.image_name)
         # plt.axis("off")
-        plt.imshow(im)
+
         l = len(df_obj)
+        logger.debug(f"plotting {l} routes")
+        # self.plot_one_by_one(dataframe, df_obj)
         if l < 5000 and l > 20:
             self.plot_all_routes(dataframe, df_obj)
         elif l <= 20:
             self.plot_one_by_one(dataframe, df_obj)
         else:
             self.plot_heatmap( dataframe, df_obj)
-        plt.show()
         # plt.pause(0.1)
 
     def plot_all_routes(self, dataframe, df_obj):
+        im = mpimg.imread(self.image_name)
+        plt.imshow(im)
         for t in df_obj.index:
             oo = dataframe.loc[t]
             plt.plot(oo.x, oo.y)
+        plt.show()
+        plt.gcf().clear()
 
     def plot_one_by_one(self, dataframe, df_obj):
+        im = mpimg.imread(self.image_name)
+        for t in df_obj.head(15).index:
+            plt.imshow(im)
+            oo = dataframe.loc[t]
+            plt.plot(oo.x, oo.y,c='r')
+            # plt.plot(oo.x, oo.y,c=np.random.rand(3,1))
+            plt.pause(0.5)
+            plt.gcf().clear()
         self.plot_all_routes(dataframe, df_obj)
-        pass
 
     def plot_heatmap(self, dataframe, df_obj):
         self.plot_all_routes(dataframe, df_obj)
