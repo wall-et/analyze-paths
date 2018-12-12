@@ -134,9 +134,9 @@ class Model:
 
     def get_routes_by_area(self,x1,y1,x2,y2):
         logger.debug(f"entering get_routes_by_area x1={x1},y1={y1},x2={x2},y2={y2}")
-
         df1 = self.data[(self.data.x.between(x1, x2)) & (self.data.y.between(y1, y2))]
 
+        self.prev_data = df1
         return df1.groupby(["filename", "obj"]).size()
 
     def get_all_routes(self):
@@ -166,8 +166,8 @@ class Model:
         max = self.data_by_time.sample_time['max'].dt.time  # objs[('sample_time','max')]
 
         items = self.data_by_time[(min.between(start_time, end_time)) | ((min < start_time) & (max > start_time))]
-        obj = items.drop('sample_time', 1)
-        return obj
+        self.prev_data = items
+        return items
 
     def get_routes_be_date(self, date, hour_one, hour_two):
         logger.debug(f"entering get_routes_be_date date={date} hour_one={hour_one},hour_two={hour_two}")
