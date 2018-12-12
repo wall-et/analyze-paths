@@ -1,5 +1,5 @@
 import sys
-from settings import logger, FIXED_FILE_NAME, ERROR_FILE_NAME,DEFUALT_DATA_FILE
+from settings import logger, FIXED_FILE_NAME, ERROR_FILE_NAME ,DEFUALT_DATA_FILE
 
 
 def fix_corrupted_file(file_name):
