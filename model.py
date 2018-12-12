@@ -68,13 +68,9 @@ class Model:
         self.pickle = pd.read_pickle(FIXED_FILE_NAME_PICKLE)
 
 
-
-
     def set_index(self):
         df_by_obj = self.pickle.set_index(['filename', 'obj']).sort_index()
         df_by_obj.head()
-<<<<<<< HEAD
-=======
 
 
     def dump_to_pickle(self):
@@ -82,4 +78,3 @@ class Model:
        return df
 
 
->>>>>>> 200cf827389a7e1b5d4307d6b323ad8a495b5538
