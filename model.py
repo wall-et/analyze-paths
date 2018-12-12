@@ -59,3 +59,7 @@ class Model:
         set index
         dump to pickle
         return df
+
+    def set_index(self,df):
+        df_by_obj = df.set_index(['filename', 'obj']).sort_index()
+        df_by_obj.head()
