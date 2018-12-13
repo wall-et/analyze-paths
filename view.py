@@ -5,13 +5,14 @@ import matplotlib.image as mpimg
 import numpy as np
 from settings import logger
 
-NUM_SLICE = 10
+
 
 class View:
     def __init__(self,conf):
         self.img = None
         self.image_name = None
         self.config = conf
+        self.NUM_SLICE = self.config['num_of_blocks_in_image']
 
     def get_file(self):
         if sys.argv and len(sys.argv) > 1:
@@ -62,14 +63,14 @@ class View:
 
     def draw_grid(self):
         i = 0
-        ab = range(NUM_SLICE * NUM_SLICE)
+        ab = range(self.NUM_SLICE * self.NUM_SLICE)
         im = mpimg.imread(self.image_name)
         h, w = im.shape[:2]
         font = cv2.FONT_HERSHEY_SIMPLEX
-        dx, dy = w // NUM_SLICE, h // NUM_SLICE
-        for y in range(NUM_SLICE):
-            for x in range(NUM_SLICE):
-                x_place, y_place = int((x * dx + dx / 2) - NUM_SLICE), int(y * dy + dy - NUM_SLICE)
+        dx, dy = w // self.NUM_SLICE, h // self.NUM_SLICE
+        for y in range(self.NUM_SLICE):
+            for x in range(self.NUM_SLICE):
+                x_place, y_place = int((x * dx + dx / 2) - self.NUM_SLICE), int(y * dy + dy - self.NUM_SLICE)
                 cv2.putText(im, str(ab[i]), (x_place, y_place), font, 0.6, (0, 0, 0), 2, cv2.LINE_AA)
                 i += 1
 

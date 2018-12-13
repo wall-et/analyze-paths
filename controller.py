@@ -23,12 +23,6 @@ class Controller:
         self.image = self.v.get_image()
         self.image = self.image if self.image else DEFUALT_IMAGE_FILE
         self.filters = dict({'area':None,'hour':None,'date':None,'block':None})
-        # self.set_block_sizes()
-
-        self.command = {'area': [], 'hour': [], 'block': []}
-
-        # self.fix_data()
-        # self.initial_run()
 
     def fix_data(self):
         self.m.fix_corrupted_file(self.file)
