@@ -207,7 +207,7 @@ class Model:
         if filters['date']:
             new_series = self.get_routes_be_date(filters['date'][0],filters['date'][1],filters['date'][2])
             logger.debug(f"found {len(new_series)} routes by date")
-            
+
             indx_list = intersect_series.index.intersection(new_series.index)
             intersect_series = intersect_series.loc[indx_list]
 
