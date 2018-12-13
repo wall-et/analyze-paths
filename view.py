@@ -5,7 +5,7 @@ import cv2
 import matplotlib.image as mpimg
 import numpy as np
 from settings import logger
-
+import matplotlib.ticker as plticker
 
 
 class View:
@@ -63,33 +63,50 @@ class View:
 
 
     def draw_grid(self):
-        i = 0
-        ab = range(self.NUM_SLICE * self.NUM_SLICE)
-        im = mpimg.imread(self.image_name)
-        h, w = im.shape[:2]
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        dx, dy = w // self.NUM_SLICE, h // self.NUM_SLICE
-        for y in range(self.NUM_SLICE):
-            for x in range(self.NUM_SLICE):
-                x_place, y_place = int((x * dx + dx / 2) - self.NUM_SLICE), int(y * dy + dy - self.NUM_SLICE)
-                cv2.putText(im, str(ab[i]), (x_place, y_place), font, 0.6, (0, 0, 0), 2, cv2.LINE_AA)
-                i += 1
+        logger.debug(f"enter draw grid ")
+        img_d = mpimg.imread(self.image_name)
+        fig = plt.figure(figsize=(15, 10))
+        ax = fig.add_subplot(111)
 
-        for i in range(dy, h, dy):
-            im[i:i + 2, :] = 0
-        for i in range(dx, w, dx):
-            im[:, i:i + 2] = 0
-        image = mpimg.imread(self.image_name)
-        plt.imshow(image, alpha=0.5)
+        im_size = img_d.shape[:2]
+        width = im_size[1]
+        height = im_size[0]
+
+        myInterval_w = width // 10
+        myInterval_h = height // 10
+
+        loc_w = plticker.MultipleLocator(base=myInterval_w)
+        loc_h = plticker.MultipleLocator(base=myInterval_h)
+
+        ax.xaxis.set_major_locator(loc_w)
+        ax.yaxis.set_major_locator(loc_h)
+
+        # Add the grid
+        ax.grid(which='major', axis='both', linestyle='-', color="k")
+
+        # Add the image
+        ax.imshow(img_d)
+
+        # Find number of gridsquares in x and y direction
+        nx = abs(int(float(ax.get_xlim()[1] - ax.get_xlim()[0]) / float(myInterval_w)))
+        ny = abs(int(float(ax.get_ylim()[1] - ax.get_ylim()[0]) / float(myInterval_h)))
+
+        # Add some labels to the gridsquares
+        for j in range(ny):
+            y = myInterval_h / 2 + j * myInterval_h
+            for i in range(nx):
+                x = myInterval_w / 2. + float(i) * myInterval_w
+                ax.text(x, y, '{:d}'.format(i + j * nx), color='k', ha='center', va='center')
+
+        # Show the result
+        # plt.imshow(img,alpha=0.5)
+        # plt.show()
+
         plt.pause(0.1)
         plt.gcf().clear()
 
 
-
-
-
     def plot_all_routes(self, dataframe, df_obj):
-
         im = mpimg.imread(self.image_name)
 
         plt.imshow(im)
