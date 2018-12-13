@@ -40,6 +40,7 @@ class View:
 
     def plot_image_and_routes(self, data_obj, image_name=None):
         dataframe, df_obj = data_obj
+        # df_obj = df_obj.head(15)
         if image_name:
             self.image_name = mpimg.imread(image_name)
         # im = mpimg.imread(self.image_name)
@@ -62,7 +63,7 @@ class View:
         for t in df_obj.index:
             oo = dataframe.loc[t]
             plt.plot(oo.x, oo.y)
-        plt.show()
+        plt.pause(0.1)
         plt.gcf().clear()
 
     def plot_one_by_one(self, dataframe, df_obj):
@@ -106,7 +107,7 @@ class View:
             d, t1, t2 = date.split(",")
             date = [d, t1, t2]
         f['date'] = date
-        self.output(f"FIlter By block X,Y :(x,y)|(x,y)")
+        self.output(f"FIlter By block X,Y :1,2,50")
         block_list = []
         block = self.get_input()
         if block:
