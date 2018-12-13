@@ -17,6 +17,7 @@ class Controller:
         self.image = self.v.get_image()
         self.image = self.image if self.image else DEFUALT_IMAGE_FILE
         self.filters = dict({'area':None,'hour':None,'date':None,'block':None})
+        self.config = dict({'hard_reload':False,'auto_load':False,'num_of_blocks':10})
         # self.set_block_sizes()
 
         self.command = {'area': [], 'hour': [], 'block': []}
@@ -47,8 +48,12 @@ class Controller:
         while cmd != 'exit':
             # self.shift_cmd()
             if self.string_found("filter",cmd):
-                self.filters = self.v.get_filters()
+                self.filters = self.v.get_filters(self.filters)
                 self.v.plot_image_and_routes(self.m.get_data(self.filters))
+            if self.string_found("grid", cmd):
+                self.v.draw_grid()
+            if self.string_found("config", cmd):
+                pass
             cmd = self.v.get_input()
 
             # if self.string_found("block", cmd) or self.string_found("f4", cmd):
