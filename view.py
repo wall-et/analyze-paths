@@ -1,9 +1,11 @@
 import sys
 import matplotlib.pyplot as plt
+import cv2
 import matplotlib.image as mpimg
 import numpy as np
 from settings import logger
 
+NUM_SLICE = 10
 
 class View:
     def __init__(self):
@@ -57,16 +59,31 @@ class View:
         # plt.pause(0.1)
 
     def draw_grid(self):
-        image = mpimg.imread(self.image_name)
-        for i in range(50, 1000, 50):
-             image[i:i + 5, :] = 0
-             image[:, i:i + 5] = 0
+        i = 0
+        ab = range(NUM_SLICE * NUM_SLICE)
+        im = mpimg.imread(self.image_name)
+        h, w = im.shape[:2]
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        dx, dy = w // NUM_SLICE, h // NUM_SLICE
+        for y in range(NUM_SLICE):
+            for x in range(NUM_SLICE):
+                x_place, y_place = int((x * dx + dx / 2) - NUM_SLICE), int(y * dy + dy - NUM_SLICE)
+                cv2.putText(im, str(ab[i]), (x_place, y_place), font, 0.6, (0, 0, 0), 2, cv2.LINE_AA)
+                i += 1
 
-        plt.imshow(image, alpha=0.3)
+        for i in range(dy, h, dy):
+            im[i:i + 2, :] = 0
+        for i in range(dx, w, dx):
+            im[:, i:i + 2] = 0
+        image = mpimg.imread(self.image_name)
+        plt.imshow(image)
+
+
+
 
     def plot_all_routes(self, dataframe, df_obj):
         im = mpimg.imread(self.image_name)
-        plt.imshow(im)
+        # plt.imshow(im)
         self.draw_grid()
         for t in df_obj.index:
             oo = dataframe.loc[t]
