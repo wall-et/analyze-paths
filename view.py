@@ -151,13 +151,13 @@ class View:
                 f['area'] = None
             else:
                 # try:
-                    split_input = area.split(',')
-                    if len(split_input) != self.len_param['area']:
-                        raise ValueError("You give one or more bigger /smaller values")
+                # split_input = area.split(',')
+                # if len(split_input) != self.len_param['area']:
+                #         raise ValueError("You give one or more bigger /smaller values")
                 # except
-                    x1, y1, x2, y2 = area.split(',')
-                    area = [int(x1), int(y1), int(x2), int(y2)]
-                    f['area'] = area
+                x1, y1, x2, y2 = area.split(',')
+                area = [int(x1), int(y1), int(x2), int(y2)]
+                f['area'] = area
         self.output(f"FIlter By Hour :00:00:00,00:00:00: current ({olf_f['hour']})")
         hour = self.get_input()
         if not hour:

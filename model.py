@@ -196,6 +196,7 @@ class Model:
         height = img_size[0]
         logger.debug(f"entering get square{list_square}")
         intersect_series = pd.Series([])
+        
         for squere_index in list_square:
             row_index = int(squere_index) // self.NUM_SLICE_Y
             col_index = int(squere_index) - (row_index * self.NUM_SLICE_X)
@@ -214,7 +215,7 @@ class Model:
         return intersect_series.groupby(["filename", "obj"]).size()
 
 
-    def get_routes_be_hour(self, hour_one, hour_two):
+    def get_routes_by_hour(self, hour_one, hour_two):
         logger.debug(f"entering get_routes_be_hour hour_one={hour_one},hour_two={hour_two}")
 
         start_time = pd.to_datetime(hour_one).time()
