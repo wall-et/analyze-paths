@@ -1,11 +1,13 @@
 import sys
 import matplotlib.pyplot as plt
 from matplotlib import cm as CM
-import cv2
 import matplotlib.image as mpimg
-import numpy as np
 from settings import logger
 import matplotlib.ticker as plticker
+import numpy as np
+from PIL import Image
+import pandas as pd
+
 
 
 class View:
@@ -14,7 +16,7 @@ class View:
         self.image_name = None
         self.config = conf
         self.NUM_SLICE = int(self.config['num_of_blocks_in_image'])
-
+        self.len_param = {'area': 4, 'hour': 2, 'date': 3 }
     def get_file(self):
         if sys.argv and len(sys.argv) > 1:
             return sys.argv[1]
@@ -44,6 +46,9 @@ class View:
         plt.show()
 
     def plot_image_and_routes(self, data_obj):
+        wm = plt.get_current_fig_manager()
+        wm.window.wm_geometry("600x600+500+10")
+
         dataframe, df_obj = data_obj
         # df_obj = df_obj.head(35)
         # im = mpimg.imread(self.image_name)
@@ -53,7 +58,8 @@ class View:
         logger.debug(f"plotting {l} routes")
         # self.plot_one_by_one(dataframe, df_obj)
         lim = int(self.config['path_by_path_limit'])
-        if l < 5000 and l > lim:
+        max_lim = int(self.config['start_draw_heatmap_limit'])
+        if l < max_lim and l > lim:
             self.plot_all_routes(dataframe, df_obj)
         elif l <= lim:
             self.plot_one_by_one(dataframe, df_obj)
@@ -65,15 +71,15 @@ class View:
     def draw_grid(self):
         logger.debug(f"enter draw grid ")
         img_d = mpimg.imread(self.image_name)
-        fig = plt.figure(figsize=(15, 10))
+        fig = plt.figure(figsize=(7.5, 5))
         ax = fig.add_subplot(111)
 
         im_size = img_d.shape[:2]
         width = im_size[1]
         height = im_size[0]
 
-        myInterval_w = width // 10
-        myInterval_h = height // 10
+        myInterval_w = width // int(self.config['num_of_blocks_in_image'])
+        myInterval_h = height // int(self.config['num_of_blocks_in_image'])
 
         loc_w = plticker.MultipleLocator(base=myInterval_w)
         loc_h = plticker.MultipleLocator(base=myInterval_h)
@@ -97,10 +103,6 @@ class View:
             for i in range(nx):
                 x = myInterval_w / 2. + float(i) * myInterval_w
                 ax.text(x, y, '{:d}'.format(i + j * nx), color='k', ha='center', va='center')
-
-        # Show the result
-        # plt.imshow(img,alpha=0.5)
-        # plt.show()
 
         plt.pause(0.1)
         plt.gcf().clear()
@@ -134,21 +136,14 @@ class View:
 
 
     def plot_heatmap(self, dataframe, df_obj):
-        # self.plot_all_routes(dataframe, df_obj.head(100))
         im = mpimg.imread(self.image_name)
-        # plt.imshow(im)
-        filtered = dataframe.loc[df_obj.index]
-        x = filtered.x
-        y = filtered.y
-
-        # heatmap, xedges, yedges = np.histogram2d(x, y, bins=(im.shape[0],im.shape[1]))
-        heatmap, xedges, yedges = np.histogram2d(x, y,cmap = CM.jet, bins = None)
-        extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
-
-        plt.clf()
-        plt.imshow(heatmap, extent=extent)
-        plt.show()
-
+        plt.imshow(im)
+        count = pd.DataFrame({'count': dataframe.loc[df_obj.index].groupby(["x", "y"]).size()}).reset_index()
+        mat_count = count.pivot('y', 'x', 'count').values
+        plt.imshow(mat_count, cmap=plt.get_cmap("hsv"), interpolation='nearest')
+        plt.colorbar()
+        plt.pause(0.5)
+        plt.gcf().clear()
 
     def output(self, msg):
         print(msg)
@@ -167,9 +162,17 @@ class View:
             if area == "d":
                 f['area'] = None
             else:
-                x1, y1, x2, y2 = area.split(',')
-                area = [int(x1), int(y1), int(x2), int(y2)]
-                f['area'] = area
+                try:
+                    split_input = area.split(',')
+                    if len(split_input) != self.len_param['area']:
+                        raise ValueError("You give one or more bigger /smaller requires values")
+
+                    x1, y1, x2, y2 = split_input
+                    area = [int(x1), int(y1), int(x2), int(y2)]
+                    f['area'] = area
+                except ValueError as err:
+                    print('error params:', err)
+
         self.output(f"FIlter By Hour :00:00:00,00:00:00: current ({olf_f['hour']})")
         hour = self.get_input()
         if not hour:
@@ -178,9 +181,15 @@ class View:
             if hour == "d":
                 f['hour'] = None
             else:
-                t1, t2 = hour.split(",")
-                hour = [t1, t2]
-                f['hour'] = hour
+                try:
+                    split_input = hour.split(',')
+                    if len(split_input) != self.len_param['hour']:
+                        raise ValueError("You give one or more bigger /smaller requires values")
+                    t1, t2 = split_input
+                    hour = [t1, t2]
+                    f['hour'] = hour
+                except ValueError as err:
+                    print('error params:', err)
         self.output(f"FIlter By Date and Time :2017-08-17,00:00:00,00:00:00: current ({olf_f['date']})")
         date = self.get_input()
         if not date:
@@ -189,9 +198,15 @@ class View:
             if date == "d":
                 f['date'] = None
             else:
-                d, t1, t2 = date.split(",")
-                date = [d, t1, t2]
-                f['date'] = date
+                try:
+                    split_input = hour.split(',')
+                    if len(split_input) != self.len_param['date']:
+                        raise ValueError("You give one or more bigger /smaller requires values")
+                    d, t1, t2 = date.split(",")
+                    date = [d, t1, t2]
+                    f['date'] = date
+                except ValueError as err:
+                    print('error params:', err)
         self.output(f"FIlter By block X,Y :1,2,50: current ({olf_f['block']})")
         block_list = []
         block = self.get_input()

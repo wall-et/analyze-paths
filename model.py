@@ -1,8 +1,6 @@
 import pickle
 
-
-
-from settings import logger, FIXED_FILE_NAME, ERROR_FILE_NAME, FIXED_FILE_NAME_PICKLE,DEFUALT_IMAGE_FILE
+from settings import logger, FIXED_FILE_NAME, ERROR_FILE_NAME, FIXED_FILE_NAME_PICKLE, DEFUALT_IMAGE_FILE
 # from IPython.core.display import HTML
 # css = open('style-table.css').read() + open('style-notebook.css').read()
 # HTML('<style>{}</style>'.format(css))
@@ -13,10 +11,8 @@ import os.path
 
 
 class Model:
-    
-    
 
-    def __init__(self,conf):
+    def __init__(self, conf):
         # self.df = self.load_data()
         self.pickle = None
         self.fixed_file = None
@@ -25,13 +21,11 @@ class Model:
         self.config = conf
         self.NUM_SLICE_Y = conf['num_of_blocks_in_image']
         self.NUM_SLICE_X = conf['num_of_blocks_in_image']
-        # self.im_x = None
-        # self.im_y = None
         self.prev_data = None
 
-
     def fix_corrupted_file(self, file_name, fixed_path, corrupted_path):
-        logger.debug(f"entering fix_corrupted_file,file_name={file_name},fixed_path={fixed_path},corrupted_path={corrupted_path}")
+        logger.debug(
+            f"entering fix_corrupted_file,file_name={file_name},fixed_path={fixed_path},corrupted_path={corrupted_path}")
         logger.error(file_name)
 
         valid_counter = 0
@@ -106,11 +100,6 @@ class Model:
     def set_indexes(self):
         self.data_by_objs = self.data.groupby(["filename", "obj"]).size().sort_values(ascending=False)
         self.data_by_time = self.data.groupby(["filename", "obj"]).agg({'sample_time': ['min', 'max']})
-        # df = self.data
-        # df['x_index'] = df['x'] // (self.im_x // 10)
-        # df['y_index'] = df['y'] // (self.im_y // 10)
-        # self.data_by_blocks = df
-
 
     def set_general_index(self, df):
         logger.debug(f"entering set_index")
@@ -151,10 +140,6 @@ class Model:
             new_series = self.get_routes_by_area(filters['area'][0], filters['area'][1], filters['area'][2],
                                                  filters['area'][3])
             logger.debug(f"found {len(new_series)} routes by area")
-
-            # intersect_series = pd.Series(list(set(intersect_series).intersection(set(new_series))))
-            # intersect_series = intersect_series[intersect_series.isin(new_series)]
-
             indx_list = intersect_series.index.intersection(new_series.index)
             intersect_series = intersect_series.loc[indx_list]
 
@@ -174,17 +159,12 @@ class Model:
             indx_list = intersect_series.index.intersection(new_series.index)
             intersect_series = intersect_series.loc[indx_list]
 
-
         return (self.data, intersect_series)
 
-    def get_routes_by_area(self,x1,y1,x2,y2):
+    def get_routes_by_area(self, x1, y1, x2, y2):
         self.prev_data = self.data[(self.data.x.between(x1, x2)) & (self.data.y.between(y1, y2))]
         logger.debug(f"entering get_routes_by_area x1={x1},y1={y1},x2={x2},y2={y2}")
-        # df1 = self.data[(self.data.x.between(x1, x2)) & (self.data.y.between(y1, y2))]
-        # df1 = self.current_df[(self.current_df.x.between(int(x1), int(x2[0]))) \
-        # self.prev_data = df1
         return self.prev_data
-        # return df1.groupby(["filename", "obj"]).size()
 
     def get_all_routes(self):
         logger.debug(f"entering get_routes_by_obj")
@@ -200,11 +180,10 @@ class Model:
             row_index = int(squere_index) // self.NUM_SLICE_Y
             col_index = int(squere_index) - (row_index * self.NUM_SLICE_X)
             top_left = (col_index * (width // self.NUM_SLICE_X), (row_index) * (height // self.NUM_SLICE_Y))
-            bottom_right = ((col_index + 1) * (width // self.NUM_SLICE_X), (row_index +1) * (height // self.NUM_SLICE_Y))
+            bottom_right = (
+            (col_index + 1) * (width // self.NUM_SLICE_X), (row_index + 1) * (height // self.NUM_SLICE_Y))
             new_series = self.get_routes_by_area(top_left[0], top_left[1], bottom_right[0], bottom_right[1])
             logger.debug(f"new series length {len(new_series)}")
-            # frames = [self.filter_Square, new_series]
-            # self.filter_Square = pd.concat(frames, sort=True)
             if intersect_series.empty:
                 intersect_series = new_series
             intersect_series = intersect_series.append(new_series)
@@ -212,7 +191,6 @@ class Model:
             logger.debug(f"all series length {len(intersect_series)}")
         logger.debug(f"all series final {len(intersect_series)}")
         return intersect_series.groupby(["filename", "obj"]).size()
-
 
     def get_routes_be_hour(self, hour_one, hour_two):
         logger.debug(f"entering get_routes_be_hour hour_one={hour_one},hour_two={hour_two}")
@@ -242,7 +220,3 @@ class Model:
             (min.between(start_time, end_time))]
         return items
 
-    # def get_route_by_block(self,x_inds,y_inds):
-    #     logger.debug(f"entering get_route_by_block x_indexes={x_inds} y_indexes={y_inds}")
-    #
-    #     return self.data_by_blocks[(self.data_by_blocks['x_index'].isin(x_inds)) & (self.data_by_blocks['y_index'].isin(y_inds))]
