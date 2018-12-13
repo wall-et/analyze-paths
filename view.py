@@ -12,7 +12,7 @@ class View:
         self.img = None
         self.image_name = None
         self.config = conf
-        self.NUM_SLICE = self.config['num_of_blocks_in_image']
+        self.NUM_SLICE = int(self.config['num_of_blocks_in_image'])
 
     def get_file(self):
         if sys.argv and len(sys.argv) > 1:
@@ -44,14 +44,14 @@ class View:
 
     def plot_image_and_routes(self, data_obj):
         dataframe, df_obj = data_obj
-        # df_obj = df_obj.head(15)
+        df_obj = df_obj.head(35)
         # im = mpimg.imread(self.image_name)
         # plt.axis("off")
 
         l = len(df_obj)
         logger.debug(f"plotting {l} routes")
         # self.plot_one_by_one(dataframe, df_obj)
-        lim = self.config['path_by_path_limit']
+        lim = int(self.config['path_by_path_limit'])
         if l < 5000 and l > lim:
             self.plot_all_routes(dataframe, df_obj)
         elif l <= lim:
@@ -101,7 +101,7 @@ class View:
 
     def plot_one_by_one(self, dataframe, df_obj):
         im = mpimg.imread(self.image_name)
-        if self.config['auto_load_path_by_path']:
+        if not self.config['auto_load_path_by_path']:
             self.output("Enter to next route")
         for t in df_obj.head(15).index:
             plt.imshow(im)
@@ -110,7 +110,7 @@ class View:
             # plt.plot(oo.x, oo.y,c=np.random.rand(3,1))
             plt.pause(0.5)
             plt.gcf().clear()
-            if self.config['auto_load_path_by_path']:
+            if not self.config['auto_load_path_by_path']:
                 self.get_input()
         self.plot_all_routes(dataframe, df_obj)
 

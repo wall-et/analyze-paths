@@ -81,5 +81,8 @@ class Controller:
         self.config = n_conf
         self.m.config = self.config
         self.v.config = self.config
+        self.v.NUM_SLICE = self.config['num_of_blocks_in_image']
+        self.m.NUM_SLICE_X = self.config['num_of_blocks_in_image']
+        self.m.NUM_SLICE_Y = self.config['num_of_blocks_in_image']
 
 
