@@ -56,9 +56,18 @@ class View:
             self.plot_heatmap(dataframe, df_obj)
         # plt.pause(0.1)
 
+    def draw_grid(self):
+        image = mpimg.imread(self.image_name)
+        for i in range(50, 1000, 50):
+             image[i:i + 5, :] = 0
+             image[:, i:i + 5] = 0
+
+        plt.imshow(image, alpha=0.3)
+
     def plot_all_routes(self, dataframe, df_obj):
         im = mpimg.imread(self.image_name)
         plt.imshow(im)
+        self.draw_grid()
         for t in df_obj.index:
             oo = dataframe.loc[t]
             plt.plot(oo.x, oo.y)
