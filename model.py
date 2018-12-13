@@ -172,16 +172,16 @@ class Model:
     def get_routes_be_date(self, date, hour_one, hour_two):
         logger.debug(f"entering get_routes_be_date date={date} hour_one={hour_one},hour_two={hour_two}")
 
-        date = pd.to_datetime(date) #"2017-08-17"
+        date = pd.to_datetime(date)  # "2017-08-17"
 
-        start_time = date + pd.to_timedelta(hour_one) #"07:01:09"
-        end_time = date + pd.to_timedelta(hour_two) #"08:11:09"
+        start_time = date + pd.to_timedelta(hour_one)  # "07:01:09"
+        end_time = date + pd.to_timedelta(hour_two)  # "08:11:09"
 
         min = self.data_by_time[('sample_time', 'min')]
         max = self.data_by_time[('sample_time', 'max')]
 
         items = self.data_by_time[
-            (min.between(start_time, end_time)) | ((min.where(min < start_time) & (max.where(max > start_time))))]
+            (min.between(start_time, end_time))]
         return items
 
     def get_data(self,filters):
