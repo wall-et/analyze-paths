@@ -6,9 +6,10 @@ from settings import logger
 
 
 class View:
-    def __init__(self):
+    def __init__(self,conf):
         self.img = None
         self.image_name = None
+        self.config = conf
 
     def get_file(self):
         if sys.argv and len(sys.argv) > 1:
@@ -38,20 +39,19 @@ class View:
         plt.imshow(self.img)
         plt.show()
 
-    def plot_image_and_routes(self, data_obj, image_name=None):
+    def plot_image_and_routes(self, data_obj):
         dataframe, df_obj = data_obj
         # df_obj = df_obj.head(15)
-        if image_name:
-            self.image_name = mpimg.imread(image_name)
         # im = mpimg.imread(self.image_name)
         # plt.axis("off")
 
         l = len(df_obj)
         logger.debug(f"plotting {l} routes")
         # self.plot_one_by_one(dataframe, df_obj)
-        if l < 5000 and l > 20:
+        lim = self.config['path_by_path_limit']
+        if l < 5000 and l > lim:
             self.plot_all_routes(dataframe, df_obj)
-        elif l <= 20:
+        elif l <= lim:
             self.plot_one_by_one(dataframe, df_obj)
         else:
             self.plot_heatmap(dataframe, df_obj)
@@ -83,7 +83,8 @@ class View:
 
     def plot_one_by_one(self, dataframe, df_obj):
         im = mpimg.imread(self.image_name)
-        self.output("Enter to next route")
+        if self.config['auto_load_path_by_path']:
+            self.output("Enter to next route")
         for t in df_obj.head(15).index:
             plt.imshow(im)
             oo = dataframe.loc[t]
@@ -91,7 +92,8 @@ class View:
             # plt.plot(oo.x, oo.y,c=np.random.rand(3,1))
             plt.pause(0.5)
             plt.gcf().clear()
-            self.get_input()
+            if self.config['auto_load_path_by_path']:
+                self.get_input()
         self.plot_all_routes(dataframe, df_obj)
 
     def plot_heatmap(self, dataframe, df_obj):
@@ -155,3 +157,12 @@ class View:
                     block.append(int(obj.strip()))
                 f['block'] = block_list
         return f
+
+    def set_config(self,conf):
+        for key,value in conf.items():
+            new_set = None
+            self.output(f"setting of {key}: {value}")
+            new_set = self.get_input()
+            if new_set:
+                conf[key]=new_set
+        return conf

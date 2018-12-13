@@ -10,14 +10,19 @@ from settings import DEFUALT_IMAGE_FILE, DEFUALT_DATA_FILE
 
 class Controller:
     def __init__(self):
-        self.m = Model()
-        self.v = View()
+        self.config = dict({'hard_reload_data_files': False,
+                            'auto_load_path_by_path': False,
+                            'num_of_blocks_in_image': 10,
+                            'path_by_path_limit': 20})
+        self.m = Model(self.config)
+        # self.m.config = self.config
+        self.v = View(self.config)
+        # self.v.config = self.config
         self.file = self.v.get_file()
         self.file = self.file if self.file else DEFUALT_DATA_FILE
         self.image = self.v.get_image()
         self.image = self.image if self.image else DEFUALT_IMAGE_FILE
         self.filters = dict({'area':None,'hour':None,'date':None,'block':None})
-        self.config = dict({'hard_reload':False,'auto_load':False,'num_of_blocks':10})
         # self.set_block_sizes()
 
         self.command = {'area': [], 'hour': [], 'block': []}
@@ -43,8 +48,8 @@ class Controller:
 
     def run(self):
         self.initial_run()
-        self.v.output("Displaying the first 100 rounds.\nType filter to filter.")
-        cmd = "filter"
+        self.v.output("Displaying the first 100 rounds.\navailable: filter,grid,config,exit")
+        cmd = "init"
         while cmd != 'exit':
             # self.shift_cmd()
             if self.string_found("filter",cmd):
@@ -53,7 +58,9 @@ class Controller:
             if self.string_found("grid", cmd):
                 self.v.draw_grid()
             if self.string_found("config", cmd):
-                pass
+                n_conf = self.v.set_config(self.config)
+                self.set_filters(n_conf)
+            self.v.output("Enter Command:")
             cmd = self.v.get_input()
 
             # if self.string_found("block", cmd) or self.string_found("f4", cmd):
@@ -67,5 +74,18 @@ class Controller:
         if re.search(r"\b" + re.escape(string1) + r"\b", string2):
             return True
         return False
+
+    def set_filters(self,n_conf):
+        # if self.config['num_of_blocks_in_image'] != n_conf['num_of_blocks_in_image']:
+        #     self.config['num_of_blocks_in_image'] = n_conf['num_of_blocks_in_image']
+        #     self.m.NUM_SLICE_X = self.config['num_of_blocks_in_image']
+        #     self.m.NUM_SLICE_Y = self.config['num_of_blocks_in_image']
+        # if self.config['auto_load_path_by_path'] != n_conf['auto_load_path_by_path']:
+        #     self.config['auto_load_path_by_path'] = n_conf['auto_load_path_by_path']
+        # if self.config['hard_reload_data_files'] != n_conf['hard_reload_data_files']:
+        #     self.config['hard_reload_data_files'] = n_conf['hard_reload_data_files']
+        self.config = n_conf
+        self.m.config = self.config
+        self.v.config = self.config
 
 

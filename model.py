@@ -13,18 +13,22 @@ import os.path
 
 
 class Model:
-    NUM_SLICE_X = 10
-    NUM_SLICE_Y = 10
+    
+    
 
-    def __init__(self):
+    def __init__(self,conf):
         # self.df = self.load_data()
         self.pickle = None
         self.fixed_file = None
         self.data = None
+
+        self.config = conf
+        self.NUM_SLICE_Y = conf['num_of_blocks_in_image']
+        self.NUM_SLICE_X = conf['num_of_blocks_in_image']
         # self.im_x = None
         # self.im_y = None
-
         self.prev_data = None
+
 
     def fix_corrupted_file(self, file_name, fixed_path, corrupted_path):
         logger.debug(f"entering fix_corrupted_file,file_name={file_name},fixed_path={fixed_path},corrupted_path={corrupted_path}")
@@ -83,15 +87,16 @@ class Model:
         print("Loading Data...\nThis may take a while.")
         logger.debug(f"entering load_data,file_name={file_name}")
 
+        hard_reload = self.config['hard_reload_data_files']
         file_name_only = os.path.splitext(os.path.basename(file_name))[0]
         logger.debug(f"file name only - {file_name_only}")
         self.fixed_file = f"data/fixed_{file_name_only}.csv"
 
-        if not os.path.exists(self.fixed_file):
+        if not os.path.exists(self.fixed_file) or hard_reload:
             curr_f = f"data/corrupted_{file_name_only}.csv"
             self.fix_corrupted_file(file_name, self.fixed_file, curr_f)
 
-        if not os.path.exists(f"pickles_can/{file_name_only}.pkz"):
+        if not os.path.exists(f"pickles_can/{file_name_only}.pkz") or hard_reload:
             df = self.optimize_csv_file(self.fixed_file)
             self.dump_to_pickle(df, file_name_only)
 
