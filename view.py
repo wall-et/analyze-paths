@@ -100,7 +100,7 @@ class View:
             t1, t2 = hour.split(",")
             hour = [t1, t2]
         f['hour'] = hour
-        self.output(f"FIlter By Date and Time :00/00/00,00:00:00,00:00:00:")
+        self.output(f"FIlter By Date and Time :2017-08-17,00:00:00,00:00:00:")
         date = self.get_input()
         if date:
             d, t1, t2 = date.split(",")
