@@ -16,7 +16,7 @@ class Controller:
         self.file = self.file if self.file else DEFUALT_DATA_FILE
         self.image = self.v.get_image()
         self.image = self.image if self.image else DEFUALT_IMAGE_FILE
-
+        self.filters = dict({'area':None,'hour':None,'date':None,'block':None})
         # self.set_block_sizes()
 
         self.command = {'area': [], 'hour': [], 'block': []}
@@ -31,11 +31,28 @@ class Controller:
     def initial_run(self):
         self.v.set_image(self.image)
         self.m.load_data(self.file)
-        self.v.plot_image_and_routes(self.m.data, self.m.get_all_routes().head(90))
+        self.v.plot_image_and_routes(self.m.get_data(self.filters))
 
+    def run(self):
+        self.initial_run()
+        self.v.output("Displaying the first 100 rounds.\nType filter to filter.")
+        cmd = "filter"
+        while cmd != 'exit':
+            if self.string_found("filter",cmd):
+                self.filters = self.v.get_filters()
+                self.v.plot_image_and_routes(self.m.get_data(self.filters))
+            cmd = self.v.get_input()
+
+            # if self.string_found("block", cmd) or self.string_found("f4", cmd):
+            #     list_block = [int(x) for x in cmd.split()[1:]]
+            #     img = plt.imread(self.image)
+            #     print(img.shape)
+            #     self.v.plot_image_and_routes(self.m.data, self.m.get_square_routes(list_block, img.shape))
 
 
     def string_found(self, string1, string2):
         if re.search(r"\b" + re.escape(string1) + r"\b", string2):
             return True
         return False
+
+
