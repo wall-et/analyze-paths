@@ -1,8 +1,6 @@
 import sys
 import matplotlib.pyplot as plt
-import cv2
 import matplotlib.image as mpimg
-import numpy as np
 from settings import logger
 import matplotlib.ticker as plticker
 
@@ -13,7 +11,7 @@ class View:
         self.image_name = None
         self.config = conf
         self.NUM_SLICE = int(self.config['num_of_blocks_in_image'])
-
+        self.len_param = {'area': 4, 'hour': 2, 'date': 3 }
     def get_file(self):
         if sys.argv and len(sys.argv) > 1:
             return sys.argv[1]
@@ -152,9 +150,14 @@ class View:
             if area == "d":
                 f['area'] = None
             else:
-                x1, y1, x2, y2 = area.split(',')
-                area = [int(x1), int(y1), int(x2), int(y2)]
-                f['area'] = area
+                # try:
+                    split_input = area.split(',')
+                    if len(split_input) != self.len_param['area']:
+                        raise ValueError("You give one or more bigger /smaller values")
+                # except
+                    x1, y1, x2, y2 = area.split(',')
+                    area = [int(x1), int(y1), int(x2), int(y2)]
+                    f['area'] = area
         self.output(f"FIlter By Hour :00:00:00,00:00:00: current ({olf_f['hour']})")
         hour = self.get_input()
         if not hour:
