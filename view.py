@@ -1,5 +1,6 @@
 import sys
 import matplotlib.pyplot as plt
+from matplotlib import cm as CM
 import cv2
 import matplotlib.image as mpimg
 import numpy as np
@@ -44,7 +45,7 @@ class View:
 
     def plot_image_and_routes(self, data_obj):
         dataframe, df_obj = data_obj
-        df_obj = df_obj.head(35)
+        # df_obj = df_obj.head(35)
         # im = mpimg.imread(self.image_name)
         # plt.axis("off")
 
@@ -114,9 +115,23 @@ class View:
                 self.get_input()
         self.plot_all_routes(dataframe, df_obj)
 
+
     def plot_heatmap(self, dataframe, df_obj):
-        self.plot_all_routes(dataframe, df_obj.head(100))
-        pass
+        # self.plot_all_routes(dataframe, df_obj.head(100))
+        im = mpimg.imread(self.image_name)
+        # plt.imshow(im)
+        filtered = dataframe.loc[df_obj.index]
+        x = filtered.x
+        y = filtered.y
+
+        # heatmap, xedges, yedges = np.histogram2d(x, y, bins=(im.shape[0],im.shape[1]))
+        heatmap, xedges, yedges = np.histogram2d(x, y,cmap = CM.jet, bins = None)
+        extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
+
+        plt.clf()
+        plt.imshow(heatmap, extent=extent)
+        plt.show()
+
 
     def output(self, msg):
         print(msg)
