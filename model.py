@@ -1,4 +1,7 @@
 import pickle
+
+
+
 from settings import logger, FIXED_FILE_NAME, ERROR_FILE_NAME, FIXED_FILE_NAME_PICKLE
 # from IPython.core.display import HTML
 # css = open('style-table.css').read() + open('style-notebook.css').read()
@@ -25,7 +28,8 @@ class Model:
         self.prev_data = None
 
     def fix_corrupted_file(self, file_name, fixed_path, corrupted_path):
-        logger.debug(f"entering fix_corrupted_file,file_name={file_name},fixed_path={fixed_path},corrupted_path={corrupted_path}")
+        logger.debug(
+            f"entering fix_corrupted_file,file_name={file_name},fixed_path={fixed_path},corrupted_path={corrupted_path}")
         logger.error(file_name)
 
         valid_counter = 0
@@ -104,7 +108,6 @@ class Model:
         # df['y_index'] = df['y'] // (self.im_y // 10)
         # self.data_by_blocks = df
 
-
     def set_general_index(self, df):
         logger.debug(f"entering set_index")
 
@@ -120,19 +123,14 @@ class Model:
 
     def set_time_row(self, df):
         logger.debug(f"entering set_time_row")
-
         df['sample_time'] = df.start
         df['sample_time'] += pd.to_timedelta(df['delta_time'])
-
         df.drop('start', 1)
         df.drop('delta_time', 1)
         df.drop('path_time', 1)
-
         return df
 
-
-
-    def get_routes_by_area(self,x1,y1,x2,y2):
+    def get_routes_by_area(self, x1, y1, x2, y2):
         logger.debug(f"entering get_routes_by_area x1={x1},y1={y1},x2={x2},y2={y2}")
         df1 = self.data[(self.data.x.between(x1, x2)) & (self.data.y.between(y1, y2))]
 
@@ -144,17 +142,21 @@ class Model:
 
         return self.data_by_objs
 
-    def get_square_routes(self):
-        img = plt.imread('data/paths0.png')
-        plt.imshow(img)
-        num_square = (2, 4)
-        y = img.shape[0]
-        x = img.shape[1]
-        x_size = x // self.SLICE_X
-        y_size = y // self.SLICE_Y
-        p1 = (x_size * num_square[0], y_size * (num_square[1]))
-        p2 = (x_size * (num_square[0] + 1), y_size * (num_square[1] + 1))
-        self.get_routes_by_area(p1[0], p2[0], p1[1], p2[1])
+    def get_square_routes(self, list_square,img_size):
+        x_size = img_size[1] // self.SLICE_X
+        y_size = img_size[0] // self.SLICE_Y
+        multiple = True if len(list_square) > 2 else False
+        df_copy1 = pd.DataFrame().reindex_like(self.data)
+        res = pd.DataFrame().reindex_like(self.data)
+        for index in range(len(list_square) // 2):
+            top_left = (list_square[index] * x_size, (list_square[index+1]) * y_size)
+            bottom_right = ((list_square[index ] + 1) * x_size, list_square[index+1] * y_size)
+            df_copy1 = self.get_routes_by_area(top_left[0], bottom_right[1], bottom_right[0], top_left[1])
+            if index > 2:
+                res = res.append(df_copy1, ignore_index=True)
+        if len(list_square) > 2:
+            return res
+        return df_copy1
 
     def get_routes_be_hour(self, hour_one, hour_two):
         logger.debug(f"entering get_routes_be_hour hour_one={hour_one},hour_two={hour_two}")
@@ -172,10 +174,10 @@ class Model:
     def get_routes_be_date(self, date, hour_one, hour_two):
         logger.debug(f"entering get_routes_be_date date={date} hour_one={hour_one},hour_two={hour_two}")
 
-        date = pd.to_datetime(date) #"2017-08-17"
+        date = pd.to_datetime(date)  # "2017-08-17"
 
-        start_time = date + pd.to_timedelta(hour_one) #"07:01:09"
-        end_time = date + pd.to_timedelta(hour_two) #"08:11:09"
+        start_time = date + pd.to_timedelta(hour_one)  # "07:01:09"
+        end_time = date + pd.to_timedelta(hour_two)  # "08:11:09"
 
         min = self.data_by_time[('sample_time', 'min')]
         max = self.data_by_time[('sample_time', 'max')]
