@@ -33,11 +33,19 @@ class Controller:
         self.m.load_data(self.file)
         self.v.plot_image_and_routes(self.m.get_data(self.filters))
 
+    # def shift_cmd(self):
+    #     print(self.filters)
+    #     x1 , y1 ,x2,y2 = input("update vals")
+    #     if self.filters['area'] = {x1:{}}
+    #
+    #
+
     def run(self):
         self.initial_run()
         self.v.output("Displaying the first 100 rounds.\nType filter to filter.")
         cmd = "filter"
         while cmd != 'exit':
+            # self.shift_cmd()
             if self.string_found("filter",cmd):
                 self.filters = self.v.get_filters()
                 self.v.plot_image_and_routes(self.m.get_data(self.filters))

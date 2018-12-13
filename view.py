@@ -91,7 +91,7 @@ class View:
         self.output(f"FIlter By Area :x1,y1,x2,y2:")
         area = self.get_input()
         if area:
-            x1, y1, x2, y2 = area.split(",")
+            x1, y1, x2, y2 = area.split(',')
             area = [int(x1), int(y1), int(x2), int(y2)]
         f['area'] = area
         self.output(f"FIlter By Hour :00:00:00,00:00:00:")
@@ -106,5 +106,13 @@ class View:
             d, t1, t2 = date.split(",")
             date = [d, t1, t2]
         f['date'] = date
-        f['block'] = None
+        self.output(f"FIlter By block X,Y :(x,y)|(x,y)")
+        block_list = []
+        block = self.get_input()
+        if block:
+            block_list = block.split(",")
+            block = []
+            for obj in block_list:
+                block.append(int(obj.strip()))
+        f['block'] = block_list
         return f
