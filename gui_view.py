@@ -3,28 +3,26 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
-class MyFirstGUI:
-    def __init__(self, master):
+class Gui_View:
+    def __init__(self,functs_setup):
+        self.funcs = functs_setup
+        master = tk.Tk()
         self.master = master
         self.set_window_init()
-
-        # self.label = tk.Label(self.master, text="This is our first GUI!")
-        # self.label.pack()
-
-        # self.file_button = tk.Button(self.top_panel, text="Load File", command=self.greet)
-        # self.image_button = tk.Button(self.top_panel, text="Load Image", command=self.greet)
-        # self.file_button.pack(side=tk.LEFT)
-        # self.image_button.pack(side=tk.LEFT)
+        # self.master.mainloop()
 
     def set_window_init(self):
-        # self.master.geometry(f"{self.width}x{self.height}")  # You want the size of the app to be 500x500 :TODO: nicer setup
-        # self.master.resizable(0, 0)  # Don't allow resizing in the x or y direction
         self.master.title("Parse Routes")
+        self.draw_top_panel()
+        self.place_holder()
+        self.draw_filters()
+        self.draw_bottom_panel()
 
+    def draw_top_panel(self):
         self.master_panel = tk.Frame(self.master, borderwidth=2, bg='white')
         self.master_panel.grid(padx=10, pady=10, sticky=tk.W + tk.E + tk.N + tk.S)
 
-        self.file_button = tk.Button(self.master_panel, text="Load File", command=self.draw_image,
+        self.file_button = tk.Button(self.master_panel, text="Load File", command=self.funcs['load_file'],
                                      width=10, height=1, bg='white', font=("Arial", 11))
         self.file_button.config(font=("Arial", 11))
         self.file_button.grid()
@@ -32,7 +30,7 @@ class MyFirstGUI:
         # self.file_entry.config(font=("Arial", 11))
         self.file_entry.grid(row=0, column=1, padx=(5, 0))
 
-        self.image_button = tk.Button(self.master_panel, text="Load Image", command=self.draw_image,
+        self.image_button = tk.Button(self.master_panel, text="Load Image", command=self.funcs['load_image'],
                                       width=10, height=1, bg='white', font=("Arial", 11))
         self.image_button.grid(row=0, column=2, padx=(10, 0))
         # self.image_button.config(font=("Arial", 11))
@@ -40,29 +38,16 @@ class MyFirstGUI:
         self.img_entry.config(font=("Arial", 11))
         self.img_entry.grid(row=0, column=3, padx=(5, 0))
 
-        self.draw_image()
-        self.draw_filters()
-
-        self.status_message = tk.Message(self.master_panel, text="Program Output", bg='white', borderwidth=5,width=200,
-                                         highlightbackground="black", highlightthickness=1, font=("Arial", 14)).grid(
-            sticky=tk.W + tk.E + tk.N + tk.S, row=19, column=0, columnspan=4,rowspan=2)
-
-    def draw_image(self):
-        image = plt.imread('paths0.png')  # TODO call to defualt image
+    def draw_image(self,image_name):
+        image = plt.imread(image_name)
         fig = plt.figure()  # figsize=(5, 4)
         im = plt.imshow(image)  # later use a.set_data(new_data)
 
-        # add numbers
-        # ax = plt.gca()
-        # ax.set_xticklabels([])
-        # ax.set_yticklabels([])
-        plt.subplots_adjust(top=0.9, bottom=0.3, right=0.9, left=0.1,
-                            hspace=0, wspace=0)
+        plt.subplots_adjust(top=0.9, bottom=0.3, right=0.9, left=0.1, hspace=0, wspace=0)
 
-        # a tk.DrawingArea
         canvas = FigureCanvasTkAgg(fig, master=self.master_panel)
         canvas.draw()
-        # canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+
         canvas.get_tk_widget().grid(row=1, column=0, columnspan=4, rowspan=20, sticky=tk.W + tk.E + tk.N + tk.S,
                                     padx=(10, 10), pady=(10, 10))
 
@@ -109,12 +94,26 @@ class MyFirstGUI:
         self.block_filter = tk.Entry(self.master_panel, width=25, bg='white')
         self.block_filter.grid(row=9, column=5)
 
-        self.filters_button = tk.Button(self.master_panel, text="Load Filters", command=self.draw_image,
-                                       height=1,width=30, bg='white', font=("Arial", 11))
-        self.filters_button.grid(row=10, column=4,columnspan=2)
+        self.filters_button = tk.Button(self.master_panel, text="Load Filters", command=self.place_holder,
+                                        height=1, width=30, bg='white', font=("Arial", 11))
+        self.filters_button.grid(row=10, column=4, columnspan=2)
 
+    def draw_bottom_panel(self):
+        self.status_message = tk.Message(self.master_panel, text="Program Output", bg='white', borderwidth=5, width=200,
+                                         highlightbackground="black", highlightthickness=1, font=("Arial", 14))
+        self.status_message.grid(sticky=tk.W + tk.E + tk.N + tk.S, row=21, column=0, columnspan=4, rowspan=2)
 
-root = tk.Tk()
-my_gui = MyFirstGUI(root)
-# my_gui.draw_image()
-root.mainloop()
+    def get_file(self):
+        return self.file_entry.get()
+
+    def get_image(self):
+        return self.img_entry.get()
+
+    def place_holder(self):
+        print("button clicked")
+
+    def error_input(self,msg):
+        self.status_message.configure(text=f"Curropted input. Task aborted\n{msg}")
+# root = tk.Tk()
+# my_gui = Gui_View(root)
+# root.mainloop()
