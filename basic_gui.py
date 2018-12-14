@@ -28,7 +28,7 @@ class MyFirstGUI:
         self.master_panel.grid(padx=10, pady=10, sticky=tk.W + tk.E + tk.N + tk.S)
 
         self.file_button = tk.Button(self.master_panel, text="Load File", command=self.draw_image,
-                                     width=10, height=1,bg='white',font=("Arial", 11))
+                                     width=10, height=1, bg='white', font=("Arial", 11))
         self.file_button.config(font=("Arial", 11))
         self.file_button.grid()
         self.file_entry = tk.Entry(self.master_panel, width=20)
@@ -36,7 +36,7 @@ class MyFirstGUI:
         self.file_entry.grid(row=0, column=1, padx=(5, 0))
 
         self.image_button = tk.Button(self.master_panel, text="Load Image", command=self.draw_image,
-                                      width=10, height=1,bg='white',font=("Arial", 11))
+                                      width=10, height=1, bg='white', font=("Arial", 11))
         self.image_button.grid(row=0, column=2, padx=(10, 0))
         # self.image_button.config(font=("Arial", 11))
         self.img_entry = tk.Entry(self.master_panel, width=20)
@@ -45,6 +45,10 @@ class MyFirstGUI:
 
         self.draw_image()
         self.draw_filters()
+
+        self.status_message = tk.Message(self.master_panel, text="Program Output", bg='white', borderwidth=5,width=200,
+                                         highlightbackground="black", highlightthickness=1, font=("Arial", 14)).grid(
+            sticky=tk.W + tk.E + tk.N + tk.S, row=19, column=0, columnspan=4,rowspan=2)
 
     def draw_image(self):
         image = plt.imread('paths0.png')  # TODO call to defualt image
@@ -56,7 +60,7 @@ class MyFirstGUI:
         # ax.set_xticklabels([])
         # ax.set_yticklabels([])
         plt.subplots_adjust(top=0.9, bottom=0.3, right=0.9, left=0.1,
-                        hspace=0, wspace=0)
+                            hspace=0, wspace=0)
 
         # a tk.DrawingArea
         canvas = FigureCanvasTkAgg(fig, master=self.master_panel)
@@ -69,7 +73,7 @@ class MyFirstGUI:
         # self.active_filters = dict({'area': False, 'hour': False, 'date': False, 'block': False})
         self.active_filters = {"area": tk.IntVar(), "hour": tk.IntVar(), "date": tk.IntVar(), "block": tk.IntVar()}
         self.label_filters = tk.Label(self.master_panel, text="Filters:", bg='white', font=("Arial", 14)).grid(
-            row=1,column=4,columnspan=2,sticky=tk.W)
+            row=1, column=4, columnspan=2, sticky=tk.W)
 
         # area filter ======================================
         self.area_checkbox = tk.Checkbutton(self.master_panel, text="Filter by Area",
@@ -108,8 +112,9 @@ class MyFirstGUI:
         self.block_filter = tk.Entry(self.master_panel, width=25, bg='white')
         self.block_filter.grid(row=9, column=5)
 
-    def greet(self):
-        print("Greetings!")
+        self.filters_button = tk.Button(self.master_panel, text="Load Filters", command=self.draw_image,
+                                       height=1,width=30, bg='white', font=("Arial", 11))
+        self.filters_button.grid(row=10, column=4,columnspan=2)
 
 
 root = tk.Tk()
