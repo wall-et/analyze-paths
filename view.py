@@ -172,7 +172,6 @@ class View:
                     f['area'] = area
                 except ValueError as err:
                     print('error params:', err)
-
         self.output(f"FIlter By Hour :00:00:00,00:00:00: current ({olf_f['hour']})")
         hour = self.get_input()
         if not hour:

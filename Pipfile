@@ -13,6 +13,8 @@ pillow = "*"
 ipython = "*"
 jupyter = "*"
 tables = "*"
+pyqt5 = "*"
+crefi = "*"
 
 [requires]
 python_version = "3.7"
