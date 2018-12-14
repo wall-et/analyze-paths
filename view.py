@@ -198,7 +198,7 @@ class View:
                 f['date'] = None
             else:
                 try:
-                    split_input = hour.split(',')
+                    split_input = date.split(',')
                     if len(split_input) != self.len_param['date']:
                         raise ValueError("You give one or more bigger /smaller requires values")
                     d, t1, t2 = date.split(",")

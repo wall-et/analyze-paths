@@ -1,8 +1,7 @@
 from gui_view import Gui_View
 from model import Model
 import re
-import tkinter as tk
-
+from collections import defaultdict
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -19,29 +18,40 @@ class Controller:
         self.m = Model(self.config)
         funcs = dict({
             'load_file':self.load_data_file,
-            'load_image':self.load_image_file
+            'load_image':self.load_image_file,
+            'load_routes':self.load_image_routes
         })
         self.v = Gui_View(funcs)
 
-        self.filters = dict({'area':None,'hour':None,'date':None,'block':None})
+        self.filters = defaultdict()
+        # self.filters = {'area':None,'hour':None,'date':None,'block':None}
+        self.has_data = False
 
     def load_data_file(self):
         self.file = self.v.get_file()
         self.file = self.file if self.file else DEFUALT_DATA_FILE
         logger.debug(f"got file from view {self.file}")
+        self.v.status_update("Loading Data. please wait a while")
         self.m.load_data(self.file)
+        self.has_data = True
+        self.v.status_update("Finished Loading Data")
 
     def load_image_file(self):
         self.image = self.v.get_image()
-        self.v.error_input("YO")
         self.image = self.image if self.image else DEFUALT_IMAGE_FILE
         logger.debug(f"got image from view {self.image}")
+        self.v.set_image(self.image)
         self.v.draw_image(self.image)
 
+    def load_image_routes(self):
+        self.filters = self.v.get_filters()
+        logger.debug(f"got filters {self.filters}")
+        self.v.plot_image_and_routes(self.m.get_data(self.filters))
+        pass
 
-    def fix_data(self):
-        self.m.fix_corrupted_file(self.file)
-        self.m.load_data(self.file)
+    # def fix_data(self):
+    #     self.m.fix_corrupted_file(self.file)
+    #     self.m.load_data(self.file)
 
     def initial_run(self):
         self.v.set_image(self.image)

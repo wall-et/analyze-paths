@@ -1,6 +1,10 @@
 import tkinter as tk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import datetime
+from settings import logger
+from collections import defaultdict
+import pandas as pd
 
 
 class Gui_View:
@@ -9,6 +13,14 @@ class Gui_View:
         master = tk.Tk()
         self.master = master
         self.set_window_init()
+
+        self.len_param = {'area': 4, 'hour': 2, 'date': 3}
+
+        self.config = dict({'hard_reload_data_files': False,
+                            'auto_load_path_by_path': True,
+                            'num_of_blocks_in_image': 10,
+                            'path_by_path_limit': 30,
+                            'start_draw_heatmap_limit': 3000})
         # self.master.mainloop()
 
     def set_window_init(self):
@@ -37,19 +49,6 @@ class Gui_View:
         self.img_entry = tk.Entry(self.master_panel, width=20)
         self.img_entry.config(font=("Arial", 11))
         self.img_entry.grid(row=0, column=3, padx=(5, 0))
-
-    def draw_image(self,image_name):
-        image = plt.imread(image_name)
-        fig = plt.figure()  # figsize=(5, 4)
-        im = plt.imshow(image)  # later use a.set_data(new_data)
-
-        plt.subplots_adjust(top=0.9, bottom=0.3, right=0.9, left=0.1, hspace=0, wspace=0)
-
-        canvas = FigureCanvasTkAgg(fig, master=self.master_panel)
-        canvas.draw()
-
-        canvas.get_tk_widget().grid(row=1, column=0, columnspan=4, rowspan=20, sticky=tk.W + tk.E + tk.N + tk.S,
-                                    padx=(10, 10), pady=(10, 10))
 
     def draw_filters(self):
         # self.active_filters = dict({'area': False, 'hour': False, 'date': False, 'block': False})
@@ -94,14 +93,82 @@ class Gui_View:
         self.block_filter = tk.Entry(self.master_panel, width=25, bg='white')
         self.block_filter.grid(row=9, column=5)
 
-        self.filters_button = tk.Button(self.master_panel, text="Load Filters", command=self.place_holder,
+        self.filters_button = tk.Button(self.master_panel, text="Load Routes", command=self.funcs['load_routes'],
                                         height=1, width=30, bg='white', font=("Arial", 11))
         self.filters_button.grid(row=10, column=4, columnspan=2)
 
     def draw_bottom_panel(self):
-        self.status_message = tk.Message(self.master_panel, text="Program Output", bg='white', borderwidth=5, width=200,
-                                         highlightbackground="black", highlightthickness=1, font=("Arial", 14))
-        self.status_message.grid(sticky=tk.W + tk.E + tk.N + tk.S, row=21, column=0, columnspan=4, rowspan=2)
+        self.status_message = tk.Message(self.master_panel, text="Program Output", bg='white', borderwidth=5,anchor=tk.NW,
+                                         width=800,highlightbackground="black", highlightthickness=1, font=("Arial", 14))
+        self.status_message.grid( row=21, column=0, columnspan=4)
+
+    def draw_image(self,image_name):
+        image = plt.imread(image_name)
+        fig = plt.figure()  # figsize=(5, 4)
+        im = plt.imshow(image)  # later use a.set_data(new_data)
+
+        plt.subplots_adjust(top=0.9, bottom=0.3, right=0.9, left=0.1, hspace=0, wspace=0)
+
+        self.canvas = FigureCanvasTkAgg(fig, master=self.master_panel)
+        self.canvas.draw()
+
+        self.canvas.get_tk_widget().grid(row=1, column=0, columnspan=4, rowspan=20, sticky=tk.W + tk.E + tk.N + tk.S,
+                                    padx=(10, 10), pady=(10, 10))
+
+    def plot_image_and_routes(self,data_obj):
+        dataframe, df_obj = data_obj
+        # df_obj = df_obj.head(15)
+        l = len(df_obj)
+        logger.debug(f"plotting {l} routes")
+
+        lim = int(self.config['path_by_path_limit'])
+        max_lim = int(self.config['start_draw_heatmap_limit'])
+        logger.debug(f"l={l},lim={lim},max_lim={max_lim}")
+        if l < max_lim and l > lim:
+            self.plot_all_routes(dataframe, df_obj)
+        elif l <= lim:
+            # self.plot_all_routes(dataframe, df_obj)
+            self.plot_one_by_one(dataframe, df_obj)
+        else:
+            self.plot_heatmap(dataframe, df_obj)
+
+    def plot_all_routes(self,dataframe, df_obj):
+        logger.debug(f"entering plot_all_routes with {len(df_obj)} routes")
+        im = plt.imread(self.image_name)
+        plt.imshow(im)
+        # self.draw_grid()
+        for t in df_obj.index:
+            oo = dataframe.loc[t]
+            plt.plot(oo.x, oo.y)
+
+        self.canvas.draw()
+        plt.gcf().clear()
+
+    def plot_heatmap(self, dataframe, df_obj):
+        logger.debug(f"entering plot_heatmap with {len(df_obj)} routes")
+        im = plt.imread(self.image_name)
+        plt.imshow(im)
+        count = pd.DataFrame({'count': dataframe.loc[df_obj.index].groupby(["x", "y"]).size()}).reset_index()
+        mat_count = count.pivot('y', 'x', 'count').values
+        plt.imshow(mat_count, cmap=plt.get_cmap("hsv"), interpolation='nearest')
+        plt.colorbar()
+        # plt.pause(0.5)
+        # plt.gcf().clear()
+        self.canvas.draw()
+        plt.gcf().clear()
+
+    def plot_one_by_one(self,dataframe, df_obj):
+        logger.debug(f"entering plot_one_by_one with {len(df_obj)} routes")
+        im = plt.imread(self.image_name)
+
+        # self.draw_grid()
+        for t in df_obj.index:
+            plt.imshow(im)
+            oo = dataframe.loc[t]
+            plt.plot(oo.x, oo.y)
+            self.canvas.draw()
+            self.master.after(500)
+            plt.gcf().clear()
 
     def get_file(self):
         return self.file_entry.get()
@@ -113,7 +180,81 @@ class Gui_View:
         print("button clicked")
 
     def error_input(self,msg):
-        self.status_message.configure(text=f"Curropted input. Task aborted\n{msg}")
+        self.status_message.configure(text=f"Curropted input. Task aborted:{msg}")
+
+    def status_update(self,msg):
+        self.status_message.configure(text=f"{msg}")
+
+    def get_filters(self):
+        f = defaultdict()
+
+        f['area'] = None
+        if self.active_filters['area'].get():
+            try:
+                area = self.area_filter.get()
+                split_input = area.split(',')
+                if len(split_input) != self.len_param['area']:
+                    raise ValueError("You give one or more bigger /smaller requires values")
+
+                x1, y1, x2, y2 = split_input
+                area = [int(x1), int(y1), int(x2), int(y2)]
+                f['area'] = area
+            except ValueError as err:
+                self.error_input(f'{err}')
+
+        f['hour'] = None
+        if self.active_filters['hour'].get():
+            try:
+                hour = self.hour_filter.get()
+                split_input = hour.split(',')
+                if len(split_input) != self.len_param['hour']:
+                    raise ValueError("You give one or more bigger /smaller requires values")
+                t1, t2 = split_input
+                tdt1 = datetime.datetime.strptime(t1, "%H:%M:%S")
+                tdt2 = datetime.datetime.strptime(t2, "%H:%M:%S")
+                if tdt1 > tdt2:
+                    raise ValueError("Your times are not a valid range")
+                hour = [t1, t2]
+                f['hour'] = hour
+            except ValueError as err:
+                self.error_input(f'{err}')
+
+        f['date'] = None
+        if self.active_filters['date'].get():
+            try:
+                date = self.date_filter.get()
+                split_input = date.split(',')
+                if len(split_input) != self.len_param['date']:
+                    raise ValueError("You give one or more bigger /smaller requires values")
+                d, t1, t2 = date.split(",")
+                ddt = datetime.datetime.strptime(d, "%Y-%m-%d")
+                tdt1 = datetime.datetime.strptime(t1, "%H:%M:%S")
+                tdt2 = datetime.datetime.strptime(t2, "%H:%M:%S")
+                if tdt1 > tdt2:
+                    raise ValueError("Your times are not a valid range")
+                date = [d, t1, t2]
+                f['date'] = date
+            except ValueError as err:
+                self.error_input(f'{err}')
+
+        f['block'] = None
+        if self.active_filters['block'].get():
+            try:
+                block = self.block_filter.get()
+                block_list = block.split(",")
+                block = []
+                for obj in block_list:
+                    block.append(int(obj.strip()))
+                f['block'] = block_list
+            except ValueError as err:
+                self.error_input(f'{err}')
+        return f
+
+    def set_image(self, image_name):
+        self.image_name = image_name
+        self.img = plt.imread(image_name)
+
+
 # root = tk.Tk()
 # my_gui = Gui_View(root)
 # root.mainloop()

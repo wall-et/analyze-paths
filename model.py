@@ -46,7 +46,7 @@ class Model:
                     invalid_counter += 1
 
         logger.error(f"{valid_counter} valid lines.")
-        print(f"{valid_counter} valid lines.")
+        # print(f"{valid_counter} valid lines.")
         logger.error(f"{invalid_counter} corrupted lines. See {corrupted_path}")
 
     def optimize_csv_file(self, file_name):
@@ -78,7 +78,7 @@ class Model:
         return df
 
     def load_data(self, file_name):
-        print("Loading Data...\nThis may take a while.")
+        # print("Loading Data...\nThis may take a while.")
         logger.debug(f"entering load_data,file_name={file_name}")
 
         hard_reload = self.config['hard_reload_data_files']
@@ -130,11 +130,12 @@ class Model:
         intersect_series = self.data_by_objs
 
         if filters['hour']:
-            new_series = self.get_routes_be_hour(filters['hour'][0], filters['hour'][1])
+            new_series = self.get_routes_by_hour(filters['hour'][0], filters['hour'][1])
             logger.debug(f"found {len(new_series)} routes by hour")
 
             indx_list = intersect_series.index.intersection(new_series.index)
             intersect_series = intersect_series.loc[indx_list]
+
 
         if filters['area']:
             new_series = self.get_routes_by_area(filters['area'][0], filters['area'][1], filters['area'][2],
