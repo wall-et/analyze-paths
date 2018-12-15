@@ -22,6 +22,7 @@ class Model:
         self.NUM_SLICE_Y = conf['num_of_blocks_in_image']
         self.NUM_SLICE_X = conf['num_of_blocks_in_image']
         self.prev_data = None
+        self.data_by_time = None
 
     def fix_corrupted_file(self, file_name, fixed_path, corrupted_path):
         logger.debug(

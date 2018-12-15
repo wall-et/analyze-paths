@@ -4,8 +4,7 @@ from matplotlib import cm as CM
 import matplotlib.image as mpimg
 from settings import logger
 import matplotlib.ticker as plticker
-import numpy as np
-from PIL import Image
+# from PIL import Image
 import pandas as pd
 
 

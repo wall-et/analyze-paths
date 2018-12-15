@@ -3,7 +3,6 @@ from model import Model
 import re
 
 import pandas as pd
-import matplotlib.pyplot as plt
 
 from settings import DEFUALT_IMAGE_FILE, DEFUALT_DATA_FILE
 

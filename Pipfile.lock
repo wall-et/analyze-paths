@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "85a9d1f74d1d548bee3b9e161722421cf8aa722559f33022b39e40140a5c5cf4"
+            "sha256": "2c39739dd2614260e70a95b9d430b5a32c6cf38c03aac225543d65b0be499a71"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -66,12 +66,27 @@
             ],
             "version": "==0.5.0"
         },
+        "django": {
+            "hashes": [
+                "sha256:068d51054083d06ceb32ce02b7203f1854256047a0d58682677dd4f81bceabd7",
+                "sha256:55409a056b27e6d1246f19ede41c6c610e4cab549c005b62cbeefabc6433356b"
+            ],
+            "version": "==2.1.4"
+        },
         "entrypoints": {
             "hashes": [
                 "sha256:10ad569bb245e7e2ba425285b9fa3e8178a0dc92fc53b1e1c553805e15a8825b",
                 "sha256:d2d587dde06f99545fb13a383d2cd336a8ff1f359c5839ce3a64c917d10c029f"
             ],
             "version": "==0.2.3"
+        },
+        "image": {
+            "hashes": [
+                "sha256:3f0ea15fb523c68a08098153bb06f4a8913300277e11b61c5e71fdd57b243783",
+                "sha256:4a5807ae8f2d73289c01f158cca20082346f51de4a93353422f3ed1d0bdb6785"
+            ],
+            "index": "pypi",
+            "version": "==1.5.27"
         },
         "ipykernel": {
             "hashes": [
@@ -104,10 +119,10 @@
         },
         "jedi": {
             "hashes": [
-                "sha256:0191c447165f798e6a730285f2eee783fff81b0d3df261945ecb80983b5c3ca7",
-                "sha256:b7493f73a2febe0dc33d51c99b474547f7f6c0b2c8fb2b21f453eef204c12148"
+                "sha256:571702b5bd167911fe9036e5039ba67f820d6502832285cde8c881ab2b2149fd",
+                "sha256:c8481b5e59d34a5c7c42e98f6625e633f6ef59353abea6437472c7ec2093f191"
             ],
-            "version": "==0.13.1"
+            "version": "==0.13.2"
         },
         "jinja2": {
             "hashes": [

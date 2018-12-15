@@ -15,6 +15,7 @@ jupyter = "*"
 tables = "*"
 pyqt5 = "*"
 crefi = "*"
+image = "*"
 
 [requires]
 python_version = "3.7"
