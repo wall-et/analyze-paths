@@ -19,16 +19,22 @@ class ModelTestCase(unittest.TestCase):
          r = self.m.get_routes_by_area(100, 150, 200, 250)
          self.assertEqual(len(r), 278477)
 
+         r1 = self.m.get_routes_by_area(250, 300, 450, 350)
+         self.assertEqual(len(r1), 20908)
+
          self.m.set_indexes()
          h = self.m.get_routes_by_hour("07:01:09", "08:11:09")
          self.assertEqual(len(h), 772)
+
+         h1 = self.m.get_routes_by_hour("14:11:09", "14:15:15")
+         self.assertEqual(len(h1), 83)
 
          d = self.m.get_routes_be_date("2017-08-17", "07:01:09", "08:01:09")
          self.assertEqual(len(d), 33)
 
          d1 = self.m.get_routes_be_date("2017-08-17", "01:01:09", "04:07:45")
          self.assertEqual(len(d1), 1107)
-         
+
 
 if __name__ == '__main__':
     unittest.main()
