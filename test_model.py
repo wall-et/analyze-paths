@@ -12,19 +12,23 @@ class ModelTestCase(unittest.TestCase):
                             'start_draw_heatmap_limit': 3000})
         self.m = Model(config)
 
-    def test_load_data(self):
-         # df = self.m.optimize_csv_file(DEFUALT_DATA_FILE)
-         # print(df)
+    def test_filters(self):
          self.m.load_data(DEFUALT_DATA_FILE)
          self.m.set_indexes()
+
          r = self.m.get_routes_by_area(100, 150, 200, 250)
-         self.assertEqual(len(r),278477)
+         self.assertEqual(len(r), 278477)
 
+         self.m.set_indexes()
+         h = self.m.get_routes_by_hour("07:01:09", "08:11:09")
+         self.assertEqual(len(h), 772)
 
+         d = self.m.get_routes_be_date("2017-08-17", "07:01:09", "08:01:09")
+         self.assertEqual(len(d), 33)
 
-    #     img = self.c.image
-    #     self.assertEqual(img, DEFUALT_IMAGE_FILE)
-    #
+         d1 = self.m.get_routes_be_date("2017-08-17", "01:01:09", "04:07:45")
+         self.assertEqual(len(d1), 1107)
+         
 
 if __name__ == '__main__':
     unittest.main()
