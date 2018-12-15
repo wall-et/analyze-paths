@@ -12,8 +12,16 @@ class ModelTestCase(unittest.TestCase):
                             'start_draw_heatmap_limit': 3000})
         self.m = Model(config)
 
-    def optimize_csv_file(self):
-         self.m.optimize_csv_file(DEFUALT_DATA_FILE)
+    def test_load_data(self):
+         # df = self.m.optimize_csv_file(DEFUALT_DATA_FILE)
+         # print(df)
+         self.m.load_data(DEFUALT_DATA_FILE)
+         self.m.set_indexes()
+         r = self.m.get_routes_by_area(100, 150, 200, 250)
+         self.assertEqual(len(r),278477)
+
+
+
     #     img = self.c.image
     #     self.assertEqual(img, DEFUALT_IMAGE_FILE)
     #
