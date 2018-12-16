@@ -8,6 +8,7 @@ class ControllerTestCase(unittest.TestCase):
 
     def test_initial_run(self):
         self.c.initial_run()
+
         img = self.c.image
         self.assertEqual(img, DEFUALT_IMAGE_FILE)
 

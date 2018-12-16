@@ -13,7 +13,8 @@ class Controller:
                             'auto_load_path_by_path': False,
                             'num_of_blocks_in_image': 10,
                             'path_by_path_limit': 20,
-                            'start_draw_heatmap_limit':3000})
+                            'start_draw_heatmap_limit': 3000})
+
         self.m = Model(self.config)
         # self.m.config = self.config
         self.v = View(self.config)
@@ -22,7 +23,7 @@ class Controller:
         self.file = self.file if self.file else DEFUALT_DATA_FILE
         self.image = self.v.get_image()
         self.image = self.image if self.image else DEFUALT_IMAGE_FILE
-        self.filters = dict({'area':None,'hour':None,'date':None,'block':None})
+        self.filters = dict({'area': None, 'hour': None, 'date': None, 'block': None})
 
     def fix_data(self):
         self.m.fix_corrupted_file(self.file)
@@ -84,5 +85,3 @@ class Controller:
         self.v.NUM_SLICE = self.config['num_of_blocks_in_image']
         self.m.NUM_SLICE_X = self.config['num_of_blocks_in_image']
         self.m.NUM_SLICE_Y = self.config['num_of_blocks_in_image']
-
-

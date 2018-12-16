@@ -1,13 +1,9 @@
 import sys
 import matplotlib.pyplot as plt
-from matplotlib import cm as CM
 import matplotlib.image as mpimg
 from settings import logger
 import matplotlib.ticker as plticker
-# from PIL import Image
 import pandas as pd
-
-
 
 class View:
     def __init__(self,conf):
@@ -15,7 +11,8 @@ class View:
         self.image_name = None
         self.config = conf
         self.NUM_SLICE = int(self.config['num_of_blocks_in_image'])
-        self.len_param = {'area': 4, 'hour': 2, 'date': 3 }
+        self.len_param = {'area': 4, 'hour': 2, 'date': 3}
+
     def get_file(self):
         if sys.argv and len(sys.argv) > 1:
             return sys.argv[1]
@@ -66,7 +63,6 @@ class View:
             self.plot_heatmap(dataframe, df_obj)
         # plt.pause(0.1)
 
-
     def draw_grid(self):
         logger.debug(f"enter draw grid ")
         img_d = mpimg.imread(self.image_name)
@@ -111,7 +107,6 @@ class View:
         im = mpimg.imread(self.image_name)
 
         plt.imshow(im)
-        # self.draw_grid()
         for t in df_obj.index:
             oo = dataframe.loc[t]
             plt.plot(oo.x, oo.y)

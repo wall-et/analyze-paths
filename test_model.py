@@ -1,5 +1,5 @@
 from view import View
-from settings import DEFUALT_IMAGE_FILE, DEFUALT_DATA_FILE
+from settings import DEFUALT_DATA_FILE
 import unittest
 from model import Model
 
@@ -34,7 +34,6 @@ class ModelTestCase(unittest.TestCase):
 
          d1 = self.m.get_routes_be_date("2017-08-17", "01:01:09", "04:07:45")
          self.assertEqual(len(d1), 1107)
-
 
 if __name__ == '__main__':
     unittest.main()

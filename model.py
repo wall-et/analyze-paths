@@ -11,7 +11,6 @@ import os.path
 
 
 class Model:
-
     def __init__(self, conf):
         # self.df = self.load_data()
         self.pickle = None
@@ -62,6 +61,7 @@ class Model:
             'size': 'uint32',
             'x': 'uint16',
             'y': 'uint16'})
+
         cols = ["frame", "x", "y", "obj", "size", "seq", "tbd1", "tbd2", "tbd3", "filename", "start", "path_time",
                 "delta_time", "tbd4"]
         useful_cols = ["frame", "x", "y", "obj", "size", "seq", "filename", "start", "path_time", "delta_time"]
@@ -107,14 +107,12 @@ class Model:
 
     def set_general_index(self, df):
         logger.debug(f"entering set_index")
-
         df_by_obj = df.set_index(['filename', 'obj']).sort_index()
 
         return df_by_obj
 
     def dump_to_pickle(self, df, pickle_name):
         logger.debug(f"entering dump_to_pickle")
-
         self.data = f"pickles_can/{pickle_name}.pkz"
         df.to_pickle(f"pickles_can/{pickle_name}.pkz")
 
@@ -226,4 +224,3 @@ class Model:
         items = self.data_by_time[
             (min.between(start_time, end_time))]
         return items
-
