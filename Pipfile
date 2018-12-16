@@ -16,6 +16,7 @@ tables = "*"
 pyqt5 = "*"
 crefi = "*"
 image = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.7"
