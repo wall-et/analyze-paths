@@ -6,3 +6,5 @@
 
 {OPTIONAL: MORE PROJECT INFO}
 ![hech map](https://github.com/Elevationacademy/xt-paths-research-ella-routes-yze/blob/master/print%20scan/1.PNG)
+![hech map](https://github.com/Elevationacademy/xt-paths-research-ella-routes-yze/blob/master/print%20scan/3.PNG)
+![hech map](https://github.com/Elevationacademy/xt-paths-research-ella-routes-yze/blob/master/print%20scan/4.PNG)
