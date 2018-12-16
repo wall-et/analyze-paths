@@ -27,7 +27,7 @@ class Model:
     def fix_corrupted_file(self, file_name, fixed_path, corrupted_path):
         logger.debug(
             f"entering fix_corrupted_file,file_name={file_name},fixed_path={fixed_path},corrupted_path={corrupted_path}")
-        logger.error(file_name)
+        # logger.error(file_name)
 
         valid_counter = 0
         invalid_counter = 0
@@ -73,7 +73,7 @@ class Model:
         logger.debug(f"optimize_csv_file: finished reading csv file")
 
         df = self.set_time_row(df)
-        df = self.set_index(df)
+        df = self.set_general_index(df)
         # df = self.remove_duplicates()
 
         return df
