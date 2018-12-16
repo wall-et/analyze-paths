@@ -29,8 +29,12 @@ class Controller:
 
     def load_data_file(self):
         self.file = self.v.get_file()
-        self.file = self.file if self.file else DEFUALT_DATA_FILE
         logger.debug(f"got file from view {self.file}")
+        # self.file = self.file if self.file  else DEFUALT_DATA_FILE
+        if not self.file:
+           logger.debug(f"NOOOOO got file from view {self.file}")
+           self.v.status_update("No such this file in directory \n The program load default data")
+           self.file = DEFUALT_DATA_FILE
         self.v.status_update("Loading Data. please wait a while")
         self.m.load_data(self.file)
         self.has_data = True
@@ -38,12 +42,20 @@ class Controller:
 
     def load_image_file(self):
         self.image = self.v.get_image()
+        if not self.image:
+           logger.debug(f"NOOOOO got image from view {self.image}")
+           self.v.status_update("No such this image in directory \n The program load default data")
+           self.image = DEFUALT_IMAGE_FILE
+
         self.image = self.image if self.image else DEFUALT_IMAGE_FILE
         logger.debug(f"got image from view {self.image}")
         self.v.set_image(self.image)
         self.v.draw_image(self.image)
 
     def load_image_routes(self):
+        if not self.has_data:
+            self.v.status_update("Can't load routes with no data you can to load default data with press button")
+            return
         self.filters = self.v.get_filters()
         logger.debug(f"got filters {self.filters}")
         self.v.plot_image_and_routes(self.m.get_data(self.filters))

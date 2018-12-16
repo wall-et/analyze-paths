@@ -1,5 +1,8 @@
 import tkinter as tk
+from tkinter.ttk import Progressbar
+
 import matplotlib.pyplot as plt
+from coverage.files import os
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import datetime
 from settings import logger
@@ -171,9 +174,13 @@ class Gui_View:
             plt.gcf().clear()
 
     def get_file(self):
+        if not os.path.exists(self.file_entry.get()):
+            return None
         return self.file_entry.get()
 
     def get_image(self):
+        if not os.path.exists(self.img_entry.get()):
+            return None
         return self.img_entry.get()
 
     def place_holder(self):

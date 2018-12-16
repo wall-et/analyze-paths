@@ -31,7 +31,6 @@ class Model:
 
         valid_counter = 0
         invalid_counter = 0
-
         # for line in fileinput.input(file_name):
         with open(file_name, 'r') as datar, open(fixed_path, "w") as fixedw, open(
                 corrupted_path,
@@ -90,6 +89,10 @@ class Model:
         if not os.path.exists(self.fixed_file) or hard_reload:
             curr_f = f"data/corrupted_{file_name_only}.csv"
             self.fix_corrupted_file(file_name, self.fixed_file, curr_f)
+
+        # if not os.path.exists("pickles_can"):
+        #     logger.debug(f"create directory pickles_can")
+        #     os.makedirs("pickles_can")
 
         if not os.path.exists(f"pickles_can/{file_name_only}.pkz") or hard_reload:
             df = self.optimize_csv_file(self.fixed_file)
