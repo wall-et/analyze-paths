@@ -52,10 +52,11 @@ class Controller:
            self.v.status_update("No such this image in directory \n The program load default data")
            self.image = DEFUALT_IMAGE_FILE
 
-        self.image = self.image if self.image else DEFUALT_IMAGE_FILE
+        # self.image = self.image if self.image else DEFUALT_IMAGE_FILE
         logger.debug(f"got image from view {self.image}")
         self.v.set_image(self.image)
         self.v.draw_image(self.image)
+        self.v.status_update("Finished Loading img")
 
     def load_image_routes(self):
         if not self.has_data:
