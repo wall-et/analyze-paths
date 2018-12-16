@@ -1,5 +1,6 @@
 import tkinter as tk
 import matplotlib.pyplot as plt
+import matplotlib.ticker as plticker
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import datetime
 from settings import logger
@@ -21,6 +22,8 @@ class Gui_View:
                             'num_of_blocks_in_image': 10,
                             'path_by_path_limit': 30,
                             'start_draw_heatmap_limit': 3000})
+
+
         # self.master.mainloop()
 
     def set_window_init(self):
@@ -97,6 +100,10 @@ class Gui_View:
                                         height=1, width=30, bg='white', font=("Arial", 11))
         self.filters_button.grid(row=10, column=4, columnspan=2)
 
+        self.grid_button = tk.Button(self.master_panel, text="Show Grid", command=self.funcs['show_grid'],
+                                        height=1, width=30, bg='white', font=("Arial", 11))
+        self.grid_button.grid(row=11, column=4, columnspan=2)
+
     def draw_bottom_panel(self):
         self.status_message = tk.Message(self.master_panel, text="Program Output", bg='white', borderwidth=5,anchor=tk.NW,
                                          width=800,highlightbackground="black", highlightthickness=1, font=("Arial", 14))
@@ -104,12 +111,12 @@ class Gui_View:
 
     def draw_image(self,image_name):
         image = plt.imread(image_name)
-        fig = plt.figure()  # figsize=(5, 4)
+        self.fig = plt.figure()  # figsize=(5, 4)
         im = plt.imshow(image)  # later use a.set_data(new_data)
 
         plt.subplots_adjust(top=0.9, bottom=0.3, right=0.9, left=0.1, hspace=0, wspace=0)
 
-        self.canvas = FigureCanvasTkAgg(fig, master=self.master_panel)
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self.master_panel)
         self.canvas.draw()
 
         self.canvas.get_tk_widget().grid(row=1, column=0, columnspan=4, rowspan=20, sticky=tk.W + tk.E + tk.N + tk.S,
@@ -169,6 +176,46 @@ class Gui_View:
             self.canvas.draw()
             self.master.after(500)
             plt.gcf().clear()
+
+    def show_grid(self):
+        pass
+        logger.debug(f"enter draw grid ")
+        im = plt.imread(self.image_name)
+
+        im_size = im.shape[:2]
+        width = im_size[1]
+        height = im_size[0]
+
+        ax = self.fig.add_subplot(111)
+
+        myInterval_w = width // int(self.config['num_of_blocks_in_image'])
+        myInterval_h = height // int(self.config['num_of_blocks_in_image'])
+
+        loc_w = plticker.MultipleLocator(base=myInterval_w)
+        loc_h = plticker.MultipleLocator(base=myInterval_h)
+
+        ax.xaxis.set_major_locator(loc_w)
+        ax.yaxis.set_major_locator(loc_h)
+
+        # Add the grid
+        ax.grid(which='major', axis='both', linestyle='-', color="k")
+
+        # Add the image
+        ax.imshow(im)
+
+        # Find number of gridsquares in x and y direction
+        nx = abs(int(float(ax.get_xlim()[1] - ax.get_xlim()[0]) / float(myInterval_w)))
+        ny = abs(int(float(ax.get_ylim()[1] - ax.get_ylim()[0]) / float(myInterval_h)))
+
+        # Add some labels to the gridsquares
+        for j in range(ny):
+            y = myInterval_h / 2 + j * myInterval_h
+            for i in range(nx):
+                x = myInterval_w / 2. + float(i) * myInterval_w
+                ax.text(x, y, '{:d}'.format(i + j * nx), color='k', ha='center', va='center')
+
+        self.canvas.draw()
+        plt.gcf().clear()
 
     def get_file(self):
         return self.file_entry.get()
