@@ -4,13 +4,12 @@
 * Tzofia Tzayeg
 * Efrat Traube
 
-{OPTIONAL: MORE PROJECT INFO}
 ### THE MAIN
 ![hech map](https://github.com/Elevationacademy/xt-paths-research-ella-routes-yze/blob/master/print%20scan/1.PNG)
 ### FILTERS
 ![hech map](https://github.com/Elevationacademy/xt-paths-research-ella-routes-yze/blob/master/print%20scan/3.PNG)
 ![hech map](https://github.com/Elevationacademy/xt-paths-research-ella-routes-yze/blob/master/print%20scan/5.PNG)
-* (filter + filter)
+* filter + filter
 ![hech map](https://github.com/Elevationacademy/xt-paths-research-ella-routes-yze/blob/master/print%20scan/6.PNG)
 
 ### HEATMAP
