@@ -5,4 +5,9 @@
 * Efrat Traube
 
 {OPTIONAL: MORE PROJECT INFO}
-![hech map](https://github.com/Elevationacademy/xt-bot-hackathon-ella-team-4/blob/master/screenshots/1.PNG)
+### THE MAIN
+![hech map](https://github.com/Elevationacademy/xt-paths-research-ella-routes-yze/blob/master/print%20scan/1.PNG)
+### FILTERS
+![hech map](https://github.com/Elevationacademy/xt-paths-research-ella-routes-yze/blob/master/print%20scan/3.PNG)
+### HEATMAP
+![hech map](https://github.com/Elevationacademy/xt-paths-research-ella-routes-yze/blob/master/print%20scan/4.PNG)
