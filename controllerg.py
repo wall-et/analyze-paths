@@ -14,12 +14,13 @@ class Controller:
                             'auto_load_path_by_path': False,
                             'num_of_blocks_in_image': 10,
                             'path_by_path_limit': 20,
-                            'start_draw_heatmap_limit':3000})
+                            'start_draw_heatmap_limit':3000,})
         self.m = Model(self.config)
         funcs = dict({
             'load_file':self.load_data_file,
             'load_image':self.load_image_file,
-            'load_routes':self.load_image_routes
+            'load_routes':self.load_image_routes,
+            'show_grid':self.show_grid
         })
         self.v = Gui_View(funcs)
 
@@ -27,6 +28,9 @@ class Controller:
         # self.filters = {'area':None,'hour':None,'date':None,'block':None}
         self.has_data = False
 
+    def show_grid(self):
+        self.v.show_grid()
+        pass
     def load_data_file(self):
         self.file = self.v.get_file()
         logger.debug(f"got file from view {self.file}")
@@ -36,6 +40,7 @@ class Controller:
            self.v.status_update("No such this file in directory \n The program load default data")
            self.file = DEFUALT_DATA_FILE
         self.v.status_update("Loading Data. please wait a while")
+        logger.debug(f"got file from view {self.file}")
         self.m.load_data(self.file)
         self.has_data = True
         self.v.status_update("Finished Loading Data")

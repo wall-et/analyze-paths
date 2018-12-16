@@ -22,12 +22,12 @@ class Model:
         self.NUM_SLICE_Y = conf['num_of_blocks_in_image']
         self.NUM_SLICE_X = conf['num_of_blocks_in_image']
         self.prev_data = None
-        self.data_by_time = None
+
 
     def fix_corrupted_file(self, file_name, fixed_path, corrupted_path):
         logger.debug(
             f"entering fix_corrupted_file,file_name={file_name},fixed_path={fixed_path},corrupted_path={corrupted_path}")
-        logger.error(file_name)
+        # logger.error(file_name)
 
         valid_counter = 0
         invalid_counter = 0
@@ -72,7 +72,7 @@ class Model:
         logger.debug(f"optimize_csv_file: finished reading csv file")
 
         df = self.set_time_row(df)
-        df = self.set_index(df)
+        df = self.set_general_index(df)
         # df = self.remove_duplicates()
 
         return df
@@ -90,9 +90,9 @@ class Model:
             curr_f = f"data/corrupted_{file_name_only}.csv"
             self.fix_corrupted_file(file_name, self.fixed_file, curr_f)
 
-        # if not os.path.exists("pickles_can"):
-        #     logger.debug(f"create directory pickles_can")
-        #     os.makedirs("pickles_can")
+        if not os.path.exists("pickles_can"):
+            logger.debug(f"create directory pickles_can")
+            os.makedirs("pickles_can")
 
         if not os.path.exists(f"pickles_can/{file_name_only}.pkz") or hard_reload:
             df = self.optimize_csv_file(self.fixed_file)
