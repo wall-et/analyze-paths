@@ -33,7 +33,8 @@ class Controller:
         # self.file = self.file if self.file  else DEFUALT_DATA_FILE
         if not self.file:
            logger.debug(f"NOOOOO got file from view {self.file}")
-           self.v.status_update("No such this file in directory \n The program load default data")
+           self.v.status_update("No such file in directory. \n")
+           return
            self.file = DEFUALT_DATA_FILE
         self.v.status_update("Loading Data. please wait a while")
         logger.debug(f"got file from view {self.file}")
@@ -45,7 +46,7 @@ class Controller:
         self.image = self.v.get_image()
         if not self.image:
            logger.debug(f"NOOOOO got image from view {self.image}")
-           self.v.status_update("No such this image in directory \n The program load default data")
+           self.v.status_update("No such image in directory.\n defualt image loaded")
            self.image = DEFUALT_IMAGE_FILE
 
         # self.image = self.image if self.image else DEFUALT_IMAGE_FILE
