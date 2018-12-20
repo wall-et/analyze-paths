@@ -11,7 +11,7 @@ __pycache__/
 Pipfile.lock  # This file should actually BE in the repository
 
 oddetect.csv
-log.txt
+log.log
 error_log.txt
 
 pickles_can/

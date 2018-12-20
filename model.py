@@ -1,6 +1,6 @@
 import pickle
 
-from settings import logger, FIXED_FILE_NAME, ERROR_FILE_NAME, FIXED_FILE_NAME_PICKLE, DEFUALT_IMAGE_FILE
+from settings import logger, FIXED_FILE_NAME, ERROR_FILE_NAME, FIXED_FILE_NAME_PICKLE, DEFUALT_IMAGE_FILE,GENERAL_SETTINGS
 # from IPython.core.display import HTML
 # css = open('style-table.css').read() + open('style-notebook.css').read()
 # HTML('<style>{}</style>'.format(css))
@@ -11,15 +11,15 @@ import os.path
 
 
 class Model:
-    def __init__(self, conf):
+    def __init__(self):
         # self.df = self.load_data()
         self.pickle = None
         self.fixed_file = None
         self.data = None
 
-        self.config = conf
-        self.NUM_SLICE_Y = conf['num_of_blocks_in_image']
-        self.NUM_SLICE_X = conf['num_of_blocks_in_image']
+        self.config = GENERAL_SETTINGS
+        self.NUM_SLICE_Y = self.config['num_of_blocks_in_image']
+        self.NUM_SLICE_X = self.config['num_of_blocks_in_image']
         self.prev_data = None
 
 

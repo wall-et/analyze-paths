@@ -1,15 +1,15 @@
 import sys
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-from settings import logger
+from settings import logger,GENERAL_SETTINGS
 import matplotlib.ticker as plticker
 import pandas as pd
 
 class View:
-    def __init__(self,conf):
+    def __init__(self):
         self.img = None
         self.image_name = None
-        self.config = conf
+        self.config = GENERAL_SETTINGS
         self.NUM_SLICE = int(self.config['num_of_blocks_in_image'])
         self.len_param = {'area': 4, 'hour': 2, 'date': 3}
 

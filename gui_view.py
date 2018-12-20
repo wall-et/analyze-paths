@@ -9,6 +9,7 @@ import datetime
 from settings import logger
 from collections import defaultdict
 import pandas as pd
+from settings import GENERAL_SETTINGS
 
 
 class Gui_View:
@@ -20,11 +21,7 @@ class Gui_View:
 
         self.len_param = {'area': 4, 'hour': 2, 'date': 3}
 
-        self.config = dict({'hard_reload_data_files': False,
-                            'auto_load_path_by_path': True,
-                            'num_of_blocks_in_image': 10,
-                            'path_by_path_limit': 30,
-                            'start_draw_heatmap_limit': 3000})
+        self.config = GENERAL_SETTINGS
 
 
         # self.master.mainloop()

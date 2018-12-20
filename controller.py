@@ -4,20 +4,16 @@ import re
 
 import pandas as pd
 
-from settings import DEFUALT_IMAGE_FILE, DEFUALT_DATA_FILE
+from settings import DEFUALT_IMAGE_FILE, DEFUALT_DATA_FILE,GENERAL_SETTINGS
 
 
 class Controller:
     def __init__(self):
-        self.config = dict({'hard_reload_data_files': False,
-                            'auto_load_path_by_path': False,
-                            'num_of_blocks_in_image': 10,
-                            'path_by_path_limit': 20,
-                            'start_draw_heatmap_limit': 3000})
+        self.config = GENERAL_SETTINGS
 
-        self.m = Model(self.config)
+        self.m = Model()
         # self.m.config = self.config
-        self.v = View(self.config)
+        self.v = View()
         # self.v.config = self.config
         self.file = self.v.get_file()
         self.file = self.file if self.file else DEFUALT_DATA_FILE
