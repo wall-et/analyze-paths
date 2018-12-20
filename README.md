@@ -35,3 +35,4 @@ python paths.py
 * from 5000 paths draw time is not trivial - drawing heatmap instead.
 * up to 20 drawing one by one. auto draw and draw path by prompt
 * for logging, see log.log file
+* see defualts in settings.py
